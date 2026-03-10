@@ -264,13 +264,15 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif;}
 
 /* PROGRESS CHART */
 .chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px;}
-.chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px;}
-.chart-bars{display:flex;gap:6px;align-items:flex-end;height:80px;}
-.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;}
-.chart-bar{width:100%;background:rgba(255,107,53,.3);border-radius:4px 4px 0 0;transition:height .5s ease;min-height:4px;position:relative;}
-.chart-bar.current{background:var(--orange);}
-.chart-bar-lbl{font-size:9px;color:var(--dim);text-align:center;}
-.chart-bar-val{font-size:9px;color:var(--muted);text-align:center;}
+.chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:16px;}
+.chart-bars{display:flex;gap:8px;align-items:flex-end;height:140px;padding-bottom:4px;}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;}
+.chart-bar-outer{width:100%;flex:1;display:flex;align-items:flex-end;position:relative;}
+.chart-bar{width:100%;background:rgba(255,107,53,.25);border-radius:4px 4px 0 0;transition:height .6s ease;min-height:3px;border:1px solid rgba(255,107,53,.15);}
+.chart-bar.current{background:var(--orange);border-color:var(--orange);}
+.chart-bar.empty{background:var(--bg4);border-color:var(--border);min-height:3px;}
+.chart-bar-lbl{font-size:9px;color:var(--dim);text-align:center;white-space:nowrap;}
+.chart-bar-val{font-size:10px;color:var(--muted);text-align:center;font-weight:600;min-height:14px;}
 
 /* responsive */
 @media(max-width:600px){
@@ -2080,8 +2082,8 @@ function getWeekNum(d){
 // ═══════════════════════════════════
 function renderCharts(){
   renderWeeklyChart();
-  renderMeasChart('gluteChart','glutes','Glute (cm)');
-  renderMeasChart('weightChart','weight','Weight (kg)');
+  renderMeasChart('gluteChart','glutes','cm');
+  renderMeasChart('weightChart','weight','kg');
 }
 
 function renderWeeklyChart(){
@@ -2089,36 +2091,50 @@ function renderWeeklyChart(){
   if(!el) return;
   const workouts=STORE.get('workouts')||[];
   const weeks=[];
+  // build last 8 weeks oldest→newest
   for(let i=7;i>=0;i--){
-    const d=new Date();d.setDate(d.getDate()-i*7);
-    const wk=getWeekNum(d);const yr=d.getFullYear();
+    const d=new Date();
+    d.setDate(d.getDate()-i*7);
+    const wk=getWeekNum(d);
+    const yr=d.getFullYear();
     const count=workouts.filter(w=>{
       const wd=new Date(w.date);
       return getWeekNum(wd)===wk&&wd.getFullYear()===yr;
     }).length;
-    weeks.push({label:'W'+(8-i),count});
+    const mo=d.toLocaleDateString('en',{month:'short',day:'numeric'});
+    weeks.push({label: i===0?'Now':mo, count, isCurrent: i===0});
   }
   const max=Math.max(...weeks.map(w=>w.count),1);
-  el.innerHTML=weeks.map((w,i)=>`
+  el.innerHTML=weeks.map(w=>`
     <div class="chart-bar-wrap">
-      <div class="chart-bar-val">${w.count||''}</div>
-      <div class="chart-bar ${i===7?'current':''}" style="height:${(w.count/max)*100}%;width:100%;"></div>
+      <div class="chart-bar-val">${w.count>0?w.count:''}</div>
+      <div class="chart-bar-outer">
+        <div class="chart-bar ${w.isCurrent?'current':''} ${w.count===0?'empty':''}"
+          style="height:${w.count===0?3:Math.max((w.count/max)*100,8)}%;"></div>
+      </div>
       <div class="chart-bar-lbl">${w.label}</div>
     </div>`).join('');
 }
 
-function renderMeasChart(elId, field, label){
+function renderMeasChart(elId, field, unit){
   const el=document.getElementById(elId);
   if(!el) return;
   const all=(STORE.get('measurements')||[]).filter(m=>m[field]).sort((a,b)=>a.ts-b.ts).slice(-8);
-  if(all.length===0){el.innerHTML='<div style="font-size:12px;color:var(--dim);padding:20px;text-align:center;">No data yet</div>';return;}
+  if(all.length===0){
+    el.innerHTML='<div style="font-size:12px;color:var(--dim);padding:20px 0;text-align:center;">Log measurements to see progress here</div>';
+    return;
+  }
   const vals=all.map(m=>parseFloat(m[field]));
-  const max=Math.max(...vals);const min=Math.min(...vals)-2;
+  const max=Math.max(...vals);
+  const min=Math.min(...vals);
   const range=max-min||1;
   el.innerHTML=all.map((m,i)=>`
     <div class="chart-bar-wrap">
-      <div class="chart-bar-val" style="font-size:8px;">${vals[i]}</div>
-      <div class="chart-bar ${i===all.length-1?'current':''}" style="height:${((vals[i]-min)/range)*90+10}%;width:100%;"></div>
+      <div class="chart-bar-val">${vals[i]}${unit}</div>
+      <div class="chart-bar-outer">
+        <div class="chart-bar ${i===all.length-1?'current':''}"
+          style="height:${Math.max(((vals[i]-min)/range)*85+15,15)}%;"></div>
+      </div>
       <div class="chart-bar-lbl">${m.date.split('/').slice(0,2).join('/')}</div>
     </div>`).join('');
 }
