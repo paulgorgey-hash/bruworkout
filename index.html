@@ -3,424 +3,2178 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Glute Architect — Your Custom Plan</title>
+<title>Glute Architect Pro</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:#0D0D0D;color:#F0EDE8;font-family:'DM Sans',sans-serif;min-height:100vh;}
-  ::-webkit-scrollbar{width:4px;}
-  ::-webkit-scrollbar-track{background:#1a1a1a;}
-  ::-webkit-scrollbar-thumb{background:#FF6B35;border-radius:4px;}
-  .hero{background:linear-gradient(135deg,#1a0a00 0%,#0D0D0D 40%,#0a1a0a 100%);padding:60px 24px 48px;text-align:center;border-bottom:1px solid #2a2a2a;position:relative;overflow:hidden;}
-  .hero-glow{position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 50% 0%,rgba(255,107,53,0.12) 0%,transparent 70%);pointer-events:none;}
-  .badge{display:inline-block;background:#FF6B35;color:#0D0D0D;font-size:11px;font-weight:700;letter-spacing:.2em;padding:6px 16px;border-radius:2px;margin-bottom:20px;text-transform:uppercase;}
-  h1{font-family:'Playfair Display',serif;font-size:clamp(42px,8vw,76px);font-weight:900;line-height:1.0;letter-spacing:-2px;color:#F0EDE8;margin-bottom:8px;}
-  h1 span{color:#FF6B35;}
-  .hero-sub{font-weight:300;font-size:16px;color:#888;letter-spacing:.05em;max-width:420px;margin:16px auto 0;}
-  .stats{display:flex;justify-content:center;gap:32px;margin-top:40px;flex-wrap:wrap;}
-  .stat-val{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#FF6B35;}
-  .stat-lbl{font-size:11px;color:#666;letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
-  .tabs{display:flex;border-bottom:1px solid #2a2a2a;background:#111;position:sticky;top:0;z-index:10;}
-  .tab{flex:1;padding:18px 8px;background:transparent;color:#555;font-size:13px;font-weight:500;letter-spacing:.05em;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .3s;}
-  .tab.active{color:#FF6B35;border-bottom:2px solid #FF6B35;}
-  .tab:hover{color:#ccc;}
-  .content{max-width:860px;margin:0 auto;padding:0 16px 80px;}
-  .section{display:none;}
-  .section.active{display:block;}
-  .info-box{background:linear-gradient(90deg,rgba(255,107,53,0.08),transparent);border:1px solid rgba(255,107,53,.2);border-radius:8px;padding:20px 24px;margin:32px 0 24px;}
-  .info-box p{font-size:14px;color:#ccc;line-height:1.7;}
-  .info-box .accent{color:#FF6B35;font-weight:600;}
-  .day-card{border-radius:10px;margin-bottom:12px;overflow:hidden;border:1px solid #222;background:#111;transition:all .3s;}
-  .day-card.open{border-color:rgba(255,107,53,.4);background:#141414;}
-  .day-header{display:flex;align-items:center;padding:20px 24px;gap:16px;cursor:pointer;}
-  .day-tag-box{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:.05em;flex-shrink:0;}
-  .day-tag-label{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
-  .day-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#F0EDE8;}
-  .day-arrow{color:#444;font-size:20px;margin-left:auto;transition:transform .3s;}
-  .day-card.open .day-arrow{transform:rotate(180deg);}
-  .day-body{padding:0 24px 24px;display:none;}
-  .day-card.open .day-body{display:block;}
-  .day-body-inner{border-top:1px solid #222;padding-top:20px;}
-  .ex-row{display:grid;grid-template-columns:1fr auto auto;gap:8px 20px;padding:14px 0;border-bottom:1px solid #1e1e1e;align-items:start;}
-  .ex-row:last-child{border-bottom:none;}
-  .ex-name{font-weight:600;font-size:15px;color:#F0EDE8;margin-bottom:4px;}
-  .ex-note{font-size:12px;color:#666;line-height:1.5;font-style:italic;}
-  .ex-num{text-align:center;}
-  .ex-num-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#FF6B35;}
-  .ex-num-val.small{font-size:16px;color:#ccc;}
-  .ex-num-lbl{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.1em;}
-  .prog-box{margin-top:28px;padding:24px;background:#111;border-radius:10px;border:1px solid #222;}
-  .prog-box h3{font-family:'Playfair Display',serif;font-size:18px;color:#F0EDE8;margin-bottom:12px;}
-  .prog-row{display:flex;gap:16px;margin-bottom:12px;align-items:flex-start;}
-  .prog-phase{flex-shrink:0;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.2);border-radius:4px;padding:3px 10px;font-size:11px;font-weight:700;color:#FF6B35;letter-spacing:.05em;white-space:nowrap;}
-  .prog-desc{font-size:13px;color:#888;line-height:1.6;}
-  .macro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:32px 0 28px;}
-  .macro-card{background:#111;border-radius:10px;padding:20px 16px;text-align:center;}
-  .macro-val{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;}
-  .macro-lbl{font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.12em;margin-top:4px;}
-  .diet-note{font-size:13px;color:#666;line-height:1.7;margin-bottom:28px;padding:0 4px;}
-  .meal-card{background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:20px 24px;margin-bottom:12px;display:grid;grid-template-columns:80px 1fr auto;gap:0 20px;align-items:start;transition:transform .25s;}
-  .meal-card:hover{transform:translateY(-2px);}
-  .meal-icon{font-size:26px;}
-  .meal-time{font-size:11px;color:#555;margin-top:4px;text-transform:uppercase;letter-spacing:.1em;}
-  .meal-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#F0EDE8;margin-bottom:8px;}
-  .meal-food{font-size:13px;color:#888;margin-bottom:3px;display:flex;align-items:center;gap:8px;}
-  .dot{width:4px;height:4px;background:#FF6B35;border-radius:50%;flex-shrink:0;display:inline-block;}
-  .meal-kcal-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#FF6B35;text-align:right;}
-  .meal-kcal-lbl{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.08em;text-align:right;}
-  .meal-macros{margin-top:8px;text-align:right;}
-  .meal-macros div{font-size:11px;}
-  .supp-box{margin-top:24px;padding:24px;background:#111;border-radius:10px;border:1px solid rgba(255,107,53,.15);}
-  .supp-box h3{font-family:'Playfair Display',serif;font-size:16px;color:#F0EDE8;margin-bottom:14px;}
-  .supp-row{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #1a1a1a;}
-  .supp-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-  .supp-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;}
-  .supp-name{font-weight:600;font-size:14px;color:#F0EDE8;}
-  .supp-dose{font-size:11px;color:#FF6B35;font-weight:700;}
-  .supp-note{font-size:12px;color:#666;margin-top:3px;}
-  .tips-intro{font-size:14px;color:#666;line-height:1.7;margin:32px 0 24px;}
-  .tips-grid{display:grid;gap:14px;}
-  .tip-card{background:#111;border-radius:10px;padding:24px;border:1px solid #1e1e1e;display:grid;grid-template-columns:48px 1fr;gap:0 18px;align-items:start;transition:transform .25s;}
-  .tip-card:hover{transform:translateY(-3px);}
-  .tip-icon{width:48px;height:48px;background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;}
-  .tip-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#F0EDE8;margin-bottom:8px;}
-  .tip-body{font-size:13px;color:#888;line-height:1.7;}
-  .timeline-box{margin-top:32px;padding:28px 24px;background:#111;border-radius:10px;border:1px solid #1e1e1e;}
-  .timeline-box h3{font-family:'Playfair Display',serif;font-size:20px;color:#F0EDE8;margin-bottom:24px;}
-  .tl-row{display:flex;gap:20px;margin-bottom:20px;align-items:flex-start;}
-  .tl-dot-col{display:flex;flex-direction:column;align-items:center;gap:0;}
-  .tl-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
-  .tl-line{width:1px;height:40px;background:#2a2a2a;}
-  .tl-phase{font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
-  .tl-desc{font-size:13px;color:#888;line-height:1.6;}
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --orange:#FF6B35;--teal:#4ECDC4;--gold:#FFE66D;--soft:#A8DADC;
+  --bg:#0D0D0D;--bg2:#111;--bg3:#141414;--bg4:#1a1a1a;
+  --border:#222;--border2:#2a2a2a;--text:#F0EDE8;--muted:#888;--dim:#555;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--bg4);}::-webkit-scrollbar-thumb{background:var(--orange);border-radius:4px;}
+input,textarea,select{background:var(--bg4);border:1px solid var(--border2);color:var(--text);font-family:'DM Sans',sans-serif;border-radius:6px;padding:8px 12px;font-size:13px;outline:none;transition:border .2s;}
+input:focus,textarea:focus,select:focus{border-color:var(--orange);}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;}
+.serif{font-family:'Playfair Display',serif;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a0800 0%,var(--bg) 45%,#030d0a 100%);padding:56px 24px 44px;text-align:center;border-bottom:1px solid var(--border2);position:relative;overflow:hidden;}
+.hero-glow{position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 50% -10%,rgba(255,107,53,.15) 0%,transparent 65%);pointer-events:none;}
+.hero-ring{position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:400px;height:400px;border-radius:50%;border:1px solid rgba(255,107,53,.06);pointer-events:none;}
+.hero-ring2{position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:280px;height:280px;border-radius:50%;border:1px solid rgba(255,107,53,.04);pointer-events:none;}
+.badge{display:inline-block;background:var(--orange);color:#0D0D0D;font-size:10px;font-weight:700;letter-spacing:.25em;padding:5px 14px;border-radius:2px;margin-bottom:18px;text-transform:uppercase;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(48px,9vw,84px);font-weight:900;line-height:.95;letter-spacing:-3px;margin-bottom:6px;}
+.hero h1 em{color:var(--orange);font-style:normal;}
+.hero-sub{font-weight:300;font-size:15px;color:var(--muted);max-width:380px;margin:14px auto 0;line-height:1.6;}
+.hero-stats{display:flex;justify-content:center;gap:28px;margin-top:36px;flex-wrap:wrap;}
+.hstat{text-align:center;}
+.hstat-v{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--orange);}
+.hstat-l{font-size:10px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-top:2px;}
+
+/* TABS */
+.tabs{display:grid;grid-template-columns:repeat(6,1fr);background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.tab{padding:13px 2px;background:transparent;color:var(--dim);font-size:11px;font-weight:600;letter-spacing:.01em;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .25s;white-space:nowrap;text-align:center;line-height:1.3;}
+.tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+.tab:hover:not(.active){color:#aaa;}
+@media(max-width:400px){.tab{font-size:9px;padding:10px 1px;}}
+
+/* LAYOUT */
+.content{max-width:900px;margin:0 auto;padding:0 16px 100px;}
+.section{display:none;animation:fadeIn .3s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;}
+.card-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;}
+.card.highlight{border-color:rgba(255,107,53,.3);background:linear-gradient(135deg,rgba(255,107,53,.05),var(--bg2));}
+
+/* INFO BOX */
+.info-box{background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.2);border-radius:10px;padding:18px 22px;margin:28px 0 20px;}
+.info-box p{font-size:13px;color:#ccc;line-height:1.75;}
+.accent{color:var(--orange);font-weight:600;}
+
+/* SECTION HEADER */
+.section-hdr{display:flex;align-items:baseline;gap:12px;margin:32px 0 20px;}
+.section-hdr h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;}
+.section-hdr .line{flex:1;height:1px;background:var(--border);}
+
+/* DAY CARDS */
+.day-card{border-radius:12px;margin-bottom:14px;overflow:hidden;border:1px solid var(--border);background:var(--bg2);transition:border-color .25s;}
+.day-card.open{border-color:rgba(255,107,53,.4);}
+.day-header{display:flex;align-items:center;padding:18px 22px;gap:14px;cursor:pointer;transition:background .2s;}
+.day-header:hover{background:rgba(255,255,255,.02);}
+.day-abbr{width:46px;height:46px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;letter-spacing:.06em;flex-shrink:0;}
+.day-info{flex:1;}
+.day-type{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.day-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text);}
+.day-meta{font-size:11px;color:var(--dim);margin-top:3px;}
+.day-chevron{color:var(--dim);font-size:18px;transition:transform .3s;margin-left:8px;}
+.day-card.open .day-chevron{transform:rotate(180deg);}
+.day-body{display:none;padding:0 22px 22px;}
+.day-card.open .day-body{display:block;}
+.day-body-inner{border-top:1px solid var(--border);padding-top:20px;}
+
+/* EXERCISE BLOCK */
+.ex-block{border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden;}
+.ex-top{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:background .2s;}
+.ex-top:hover{background:rgba(255,255,255,.02);}
+.ex-rank{width:28px;height:28px;border-radius:6px;background:rgba(255,107,53,.12);border:1px solid rgba(255,107,53,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--orange);flex-shrink:0;}
+.ex-info{flex:1;}
+.ex-name{font-weight:700;font-size:14px;color:var(--text);}
+.ex-brief{font-size:11px;color:var(--dim);margin-top:2px;}
+.ex-pills{display:flex;gap:6px;align-items:center;}
+.pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.05em;white-space:nowrap;}
+.pill-sets{background:rgba(255,107,53,.15);color:var(--orange);border:1px solid rgba(255,107,53,.25);}
+.pill-reps{background:rgba(78,205,196,.1);color:var(--teal);border:1px solid rgba(78,205,196,.2);}
+.ex-expand{display:none;padding:0 16px 16px;}
+.ex-block.open .ex-expand{display:block;}
+.ex-chevron{font-size:14px;color:var(--dim);transition:transform .25s;}
+.ex-block.open .ex-chevron{transform:rotate(180deg);}
+
+/* COACHING CUES */
+.cue-section{margin-top:14px;}
+.cue-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--orange);margin-bottom:8px;}
+.cue-list{display:flex;flex-direction:column;gap:6px;}
+.cue-item{display:flex;gap:10px;align-items:flex-start;font-size:12px;color:#bbb;line-height:1.6;}
+.cue-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);flex-shrink:0;margin-top:5px;}
+.mistake-item{display:flex;gap:10px;align-items:flex-start;font-size:12px;color:#bbb;line-height:1.6;}
+.mistake-dot{width:6px;height:6px;border-radius:50%;background:#ff4444;flex-shrink:0;margin-top:5px;}
+.glute-focus{background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.15);border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;color:#ddd;line-height:1.65;}
+.glute-focus strong{color:var(--orange);}
+
+/* LOG SECTION */
+.log-section{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+.log-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;}
+.log-set-row{display:grid;grid-template-columns:36px 1fr 1fr 80px;gap:8px;align-items:center;margin-bottom:6px;}
+.log-set-num{font-size:11px;color:var(--dim);font-weight:700;text-align:center;}
+.log-input{width:100%;text-align:center;padding:7px 4px;font-size:13px;}
+.log-set-done{width:32px;height:32px;border-radius:8px;background:var(--bg4);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all .2s;color:var(--dim);}
+.log-set-done.done{background:rgba(78,205,196,.15);border-color:var(--teal);color:var(--teal);}
+.log-headers{display:grid;grid-template-columns:36px 1fr 1fr 80px;gap:8px;margin-bottom:4px;}
+.log-hdr{font-size:9px;color:var(--dim);text-align:center;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
+.add-set-btn{background:transparent;border:1px dashed var(--border2);color:var(--dim);border-radius:6px;padding:6px;width:100%;font-size:11px;margin-top:6px;transition:all .2s;}
+.add-set-btn:hover{border-color:var(--orange);color:var(--orange);}
+.log-note{width:100%;margin-top:8px;padding:8px 10px;font-size:12px;resize:none;border-radius:6px;min-height:52px;}
+.save-log-btn{background:var(--orange);color:#0D0D0D;border:none;border-radius:8px;padding:10px 20px;font-size:12px;font-weight:700;letter-spacing:.05em;margin-top:10px;width:100%;transition:opacity .2s;}
+.save-log-btn:hover{opacity:.85;}
+.saved-badge{display:inline-block;background:rgba(78,205,196,.15);border:1px solid var(--teal);color:var(--teal);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-top:8px;display:none;}
+
+/* REST TIMER */
+.rest-timer-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border2);padding:12px 20px;z-index:200;display:none;align-items:center;gap:16px;}
+.rest-timer-bar.visible{display:flex;}
+.timer-circle{width:52px;height:52px;border-radius:50%;background:rgba(255,107,53,.1);border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--orange);flex-shrink:0;}
+.timer-info{flex:1;}
+.timer-label{font-size:11px;color:var(--dim);font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+.timer-msg{font-size:13px;color:var(--text);font-weight:500;margin-top:2px;}
+.timer-progress{height:3px;background:var(--border2);border-radius:2px;margin-top:8px;overflow:hidden;}
+.timer-progress-bar{height:100%;background:var(--orange);border-radius:2px;transition:width 1s linear;}
+.timer-btn{background:transparent;border:1px solid var(--border2);color:var(--dim);border-radius:6px;padding:8px 14px;font-size:12px;transition:all .2s;}
+.timer-btn:hover{border-color:var(--orange);color:var(--orange);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:28px;max-width:420px;width:100%;position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--dim);font-size:20px;cursor:pointer;}
+.modal-close:hover{color:var(--text);}
+.modal h3{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:16px;color:var(--text);}
+
+/* PROGRESS TAB */
+.prog-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px;}
+.prog-stat{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center;}
+.prog-stat-val{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--orange);}
+.prog-stat-lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-top:4px;}
+.pr-list{display:flex;flex-direction:column;gap:8px;}
+.pr-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}
+.pr-name{font-size:13px;font-weight:600;color:var(--text);}
+.pr-weight{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--orange);}
+.pr-date{font-size:10px;color:var(--dim);margin-top:2px;}
+.workout-history-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px;}
+.wh-date{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;}
+.wh-day{font-size:14px;font-weight:600;color:var(--text);margin-top:3px;}
+.wh-summary{font-size:12px;color:var(--muted);margin-top:4px;}
+.wh-sets-done{display:inline-block;background:rgba(78,205,196,.12);border:1px solid rgba(78,205,196,.2);color:var(--teal);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:6px;}
+
+/* MEASUREMENTS */
+.meas-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
+.meas-input-wrap{display:flex;flex-direction:column;gap:4px;}
+.meas-lbl{font-size:11px;color:var(--dim);font-weight:600;letter-spacing:.06em;}
+.meas-history{margin-top:20px;}
+.meas-entry{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;}
+.meas-entry-date{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.meas-entry-vals{display:flex;gap:16px;flex-wrap:wrap;}
+.meas-val{font-size:12px;color:#ccc;}
+.meas-val span{color:var(--orange);font-weight:700;}
+
+/* WARMUP */
+.warmup-item{display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;}
+.warmup-num{width:28px;height:28px;border-radius:6px;background:rgba(255,107,53,.12);border:1px solid rgba(255,107,53,.2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--orange);flex-shrink:0;}
+.warmup-name{font-size:13px;font-weight:600;color:var(--text);}
+.warmup-detail{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;}
+.warmup-duration{font-size:11px;color:var(--teal);font-weight:600;margin-top:4px;}
+
+/* MACRO GRID */
+.macro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0 20px;}
+.macro-card{background:var(--bg2);border-radius:10px;padding:18px 12px;text-align:center;}
+.macro-val{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;}
+.macro-lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-top:4px;}
+
+/* MEAL */
+.meal-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:10px;display:grid;grid-template-columns:72px 1fr auto;gap:0 16px;align-items:start;transition:transform .2s;}
+.meal-card:hover{transform:translateY(-2px);}
+.meal-icon{font-size:24px;}
+.meal-time{font-size:10px;color:var(--dim);margin-top:3px;text-transform:uppercase;letter-spacing:.1em;}
+.meal-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin-bottom:7px;}
+.meal-food{font-size:12px;color:var(--muted);margin-bottom:3px;display:flex;align-items:center;gap:7px;}
+.fdot{width:3px;height:3px;background:var(--orange);border-radius:50%;flex-shrink:0;}
+.meal-kcal{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--orange);text-align:right;}
+.meal-kcal-lbl{font-size:9px;color:var(--dim);text-transform:uppercase;text-align:right;}
+.meal-macros{margin-top:6px;text-align:right;}
+.meal-macros div{font-size:10px;}
+
+/* TIPS */
+.tip-card{background:var(--bg2);border-radius:10px;padding:20px;border:1px solid var(--border);display:grid;grid-template-columns:44px 1fr;gap:0 16px;align-items:start;margin-bottom:12px;transition:transform .2s;}
+.tip-card:hover{transform:translateY(-2px);}
+.tip-icon{width:44px;height:44px;background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.tip-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:7px;}
+.tip-body{font-size:12px;color:var(--muted);line-height:1.7;}
+
+/* TIMELINE */
+.timeline-box{padding:24px;background:var(--bg2);border-radius:10px;border:1px solid var(--border);margin-top:24px;}
+.tl-row{display:flex;gap:16px;margin-bottom:18px;align-items:flex-start;}
+.tl-dc{display:flex;flex-direction:column;align-items:center;}
+.tl-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+.tl-line{width:1px;height:38px;background:var(--border);}
+.tl-phase{font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+.tl-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* SUPP */
+.supp-box{margin-top:20px;padding:20px;background:var(--bg2);border-radius:10px;border:1px solid rgba(255,107,53,.15);}
+.supp-row{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--bg4);}
+.supp-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.supp-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;}
+.supp-name{font-weight:600;font-size:13px;}
+.supp-dose{font-size:10px;color:var(--orange);font-weight:700;}
+.supp-note{font-size:11px;color:var(--dim);margin-top:2px;}
+
+/* WEEK TRACKER */
+.week-tracker{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:20px;}
+.week-day{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.week-day-lbl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.week-day-dot{width:32px;height:32px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .25s;}
+.week-day-dot.done{background:rgba(78,205,196,.15);border-color:var(--teal);}
+.week-day-dot.today{border-color:var(--orange);}
+
+/* FORM ELEMENTS */
+.form-row{display:flex;gap:10px;margin-bottom:12px;}
+.form-group{flex:1;display:flex;flex-direction:column;gap:4px;}
+.form-label{font-size:11px;color:var(--dim);font-weight:600;letter-spacing:.06em;}
+.form-input{width:100%;}
+.btn-primary{background:var(--orange);color:#0D0D0D;border:none;border-radius:8px;padding:11px 20px;font-size:13px;font-weight:700;letter-spacing:.04em;transition:opacity .2s;}
+.btn-primary:hover{opacity:.85;}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:8px;padding:10px 18px;font-size:12px;font-weight:600;transition:all .2s;}
+.btn-outline:hover{border-color:var(--orange);color:var(--orange);}
+
+/* START WORKOUT */
+.start-workout-bar{background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.25);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.swb-text{font-size:13px;color:#ccc;}
+.swb-text strong{color:var(--orange);}
+.workout-active-badge{display:inline-block;background:rgba(78,205,196,.12);border:1px solid var(--teal);color:var(--teal);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.08em;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.6;}}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--teal);color:var(--teal);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:400;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:40px 20px;color:var(--dim);}
+.empty-state .es-icon{font-size:40px;margin-bottom:12px;}
+.empty-state p{font-size:13px;line-height:1.6;}
+
+/* GLUTE MAP */
+.glute-map{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:20px;text-align:center;}
+.muscle-info{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+.muscle-box{background:var(--bg4);border-radius:8px;padding:12px 8px;text-align:center;}
+.muscle-box-name{font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.muscle-box-role{font-size:10px;color:var(--dim);line-height:1.4;}
+.muscle-box-pct{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--orange);margin-bottom:2px;}
+
+/* PROGRESS CHART */
+.chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px;}
+.chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px;}
+.chart-bars{display:flex;gap:6px;align-items:flex-end;height:80px;}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;}
+.chart-bar{width:100%;background:rgba(255,107,53,.3);border-radius:4px 4px 0 0;transition:height .5s ease;min-height:4px;position:relative;}
+.chart-bar.current{background:var(--orange);}
+.chart-bar-lbl{font-size:9px;color:var(--dim);text-align:center;}
+.chart-bar-val{font-size:9px;color:var(--muted);text-align:center;}
+
+/* responsive */
+@media(max-width:600px){
+  .hero{padding:40px 16px 32px;}
+  .hero h1{letter-spacing:-1px;}
+  .badge{font-size:8px;letter-spacing:.12em;padding:4px 10px;}
+  .hero-stats{gap:16px;}
+  .hstat-v{font-size:20px;}
+  .log-set-row{grid-template-columns:24px 1fr 1fr 48px;}
+  .log-input{padding:6px 2px;font-size:12px;}
+  .prog-grid{grid-template-columns:repeat(2,1fr);}
+  .meas-grid{grid-template-columns:1fr 1fr;}
+  .muscle-info{grid-template-columns:1fr 1fr;}
+  .meal-card{grid-template-columns:48px 1fr auto;gap:0 10px;padding:14px 12px;}
+  .meal-icon{font-size:20px;}
+  .meal-title{font-size:13px;}
+  .meal-food{font-size:11px;}
+  .macro-grid{grid-template-columns:repeat(3,1fr);gap:6px;}
+  .macro-val{font-size:20px;}
+  .day-header{padding:14px 14px;gap:10px;}
+  .day-abbr{width:38px;height:38px;font-size:10px;}
+  .day-name{font-size:14px;}
+  .day-meta{display:none;}
+  .ex-top{padding:12px;}
+  .ex-pills{flex-direction:column;gap:3px;}
+  .pill{font-size:9px;}
+  .content{padding:0 10px 100px;}
+  .card{padding:16px;}
+  .info-box{padding:14px 16px;}
+  .section-hdr h2{font-size:18px;}
+  .week-day-dot{width:28px;height:28px;font-size:12px;}
+  .week-day-lbl{font-size:8px;}
+  .tip-card{grid-template-columns:36px 1fr;gap:0 12px;padding:16px;}
+  .tip-icon{width:36px;height:36px;font-size:16px;}
+  .tip-title{font-size:14px;}
+}
 </style>
 </head>
 <body>
 
+<!-- HERO -->
 <div class="hero">
   <div class="hero-glow"></div>
-  <div class="badge">Custom Program · 28yo · 58→53kg</div>
-  <h1>GLUTE<br><span>ARCHITECT</span></h1>
-  <p class="hero-sub">Your complete hypertrophy-first program. Built for maximum glute growth and a 5kg lean recomp.</p>
-  <div class="stats">
-    <div><div class="stat-val">~1,900</div><div class="stat-lbl">Daily kcal</div></div>
-    <div><div class="stat-val">155g+</div><div class="stat-lbl">Protein/day</div></div>
-    <div><div class="stat-val">3×</div><div class="stat-lbl">Glute sessions/wk</div></div>
-    <div><div class="stat-val">16</div><div class="stat-lbl">Weeks to results</div></div>
+  <div class="hero-ring"></div>
+  <div class="hero-ring2"></div>
+  <div class="badge">Custom Program · 28yo · 58→53kg · 16 Weeks</div>
+  <h1>GLUTE<br><em>ARCHITECT</em><br><span style="font-size:.45em;letter-spacing:.05em;color:var(--muted);font-style:italic;">PRO</span></h1>
+  <p class="hero-sub">Hypertrophy-first glute program with full session logging, coaching cues, and progress tracking.</p>
+  <a href="https://secure.gymtronic.eu/" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;background:transparent;border:1px solid rgba(255,107,53,.4);color:var(--orange);text-decoration:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:10px 20px;border-radius:6px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,53,.1)'" onmouseout="this.style.background='transparent'">🏟️ Open Gymtronic Login →</a>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-v" id="hs-workouts">0</div><div class="hstat-l">Sessions logged</div></div>
+    <div class="hstat"><div class="hstat-v" id="hs-sets">0</div><div class="hstat-l">Sets completed</div></div>
+    <div class="hstat"><div class="hstat-v" id="hs-streak">0</div><div class="hstat-l">Week streak</div></div>
+    <div class="hstat"><div class="hstat-v">155g+</div><div class="hstat-l">Daily protein</div></div>
   </div>
 </div>
 
+<!-- TABS -->
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('workout',this)">🏋️ Workout Plan</button>
-  <button class="tab" onclick="switchTab('diet',this)">🥗 Diet Plan</button>
-  <button class="tab" onclick="switchTab('tips',this)">⚡ Expert Tips</button>
+  <button class="tab active" onclick="switchTab('workout',this)">🏋️ Workout</button>
+  <button class="tab" onclick="switchTab('warmup',this)">🔥 Warm-Up</button>
+  <button class="tab" onclick="switchTab('log',this)">📋 My Log</button>
+  <button class="tab" onclick="switchTab('progress',this)">📈 Progress</button>
+  <button class="tab" onclick="switchTab('diet',this)">🥗 Diet</button>
+  <button class="tab" onclick="switchTab('tips',this)">⚡ Tips</button>
 </div>
 
 <div class="content">
 
-  <!-- WORKOUT -->
-  <div id="workout" class="section active">
-    <div class="info-box">
-      <p><span class="accent">Protocol:</span> 3 dedicated glute sessions/week using a push-pull split. Every primary day begins with your heaviest compound movement when CNS is freshest. Progressive overload is mandatory — log every session.</p>
-    </div>
+<!-- ═══════════════════════════════════════════════
+     WORKOUT TAB
+═══════════════════════════════════════════════ -->
+<div id="workout" class="section active">
+  <div class="info-box">
+    <p><span class="accent">Protocol:</span> 3 dedicated glute sessions (Mon/Thu/Sat) with progressive overload every single week. Tap any exercise to expand full coaching cues, glute-activation focus, and your set log. The rest timer starts automatically when you mark a set done.</p>
+  </div>
 
-    <!-- Day Cards -->
-    <div class="day-card" id="day0">
-      <div class="day-header" onclick="toggleDay('day0')">
-        <div class="day-tag-box" style="background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.3);">
-          <span style="color:#FF6B35;">MON</span>
-        </div>
-        <div style="flex:1">
-          <div class="day-tag-label" style="color:#FF6B35;">Primary</div>
-          <div class="day-title">GLUTE FOCUSED — HEAVY</div>
-        </div>
-        <div class="day-arrow">▾</div>
+  <!-- WEEK TRACKER -->
+  <div class="section-hdr"><h2 class="serif">This Week</h2><div class="line"></div></div>
+  <div class="week-tracker" id="weekTracker"></div>
+
+  <!-- START WORKOUT BAR -->
+  <div class="start-workout-bar">
+    <div class="swb-text">Ready to train? <strong>Tap a set ✓ to log it</strong> — rest timer starts automatically.</div>
+    <div id="activeWorkoutBadge" style="display:none;" class="workout-active-badge">● WORKOUT ACTIVE</div>
+  </div>
+
+  <!-- MONDAY -->
+  <div class="day-card" id="d0">
+    <div class="day-header" onclick="toggleDay('d0')">
+      <div class="day-abbr" style="background:rgba(255,107,53,.12);border:1px solid rgba(255,107,53,.25);color:var(--orange);">MON</div>
+      <div class="day-info">
+        <div class="day-type" style="color:var(--orange);">🔥 Primary Glute — Heavy</div>
+        <div class="day-name">Maximum Load Day</div>
+        <div class="day-meta">5 exercises · ~75 min · Heaviest lifts of the week</div>
       </div>
-      <div class="day-body">
-        <div class="day-body-inner">
-          <div class="ex-row">
-            <div><div class="ex-name">Barbell Hip Thrust</div><div class="ex-note">HEAVY. Drive through heels, full lockout glute squeeze at top. King of glute mass.</div></div>
-            <div class="ex-num"><div class="ex-num-val">5</div><div class="ex-num-lbl">sets</div></div>
-            <div class="ex-num"><div class="ex-num-val small">6–8</div><div class="ex-num-lbl">reps</div></div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="day-body-inner">
+
+        <div class="ex-block" id="ex-mon-1">
+          <div class="ex-top" onclick="toggleEx('ex-mon-1')">
+            <div class="ex-rank">1</div>
+            <div class="ex-info">
+              <div class="ex-name">Barbell Hip Thrust</div>
+              <div class="ex-brief">King of glute mass — non-negotiable</div>
+            </div>
+            <div class="ex-pills">
+              <span class="pill pill-sets">5 sets</span>
+              <span class="pill pill-reps">6–8 reps</span>
+            </div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
           </div>
-          <div class="ex-row">
-            <div><div class="ex-name">Romanian Deadlift</div><div class="ex-note">Slow eccentric (3 sec down). Feel hamstring stretch, hinge don't squat.</div></div>
-            <div class="ex-num"><div class="ex-num-val">4</div><div class="ex-num-lbl">sets</div></div>
-            <div class="ex-num"><div class="ex-num-val small">8–10</div><div class="ex-num-lbl">reps</div></div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> The hip thrust is THE #1 exercise for glute mass because it puts the glute maximus under maximum tension at full hip extension — the exact range where glutes produce the most force. Every rep at the top = maximum growth signal.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Bar sits on hip crease, padded. Both feet flat, shoulder-width, toes slightly out.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Upper back (NOT neck/shoulder blades) rests on bench edge. Keep chin tucked toward chest.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Drive THROUGH YOUR HEELS. Feel the heel pressure throughout the whole movement.</div>
+                <div class="cue-item"><div class="cue-dot"></div>At the top: body is a straight line from knees to shoulders. Squeeze glutes maximally for 1–2 seconds.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Posterior pelvic tilt at the top — tuck your tailbone under, don't hyperextend your lower back.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Lower controlled in 2–3 seconds. Do NOT let hips drop fast.</div>
+              </div>
+            </div>
+            <div class="cue-section" style="margin-top:12px;">
+              <div class="cue-label" style="color:#ff4444;">❌ Common Mistakes to Avoid</div>
+              <div class="cue-list">
+                <div class="mistake-item"><div class="mistake-dot"></div>Pushing through toes — shifts load to quads, kills glute activation.</div>
+                <div class="mistake-item"><div class="mistake-dot"></div>Hyperextending lower back at top — you want glute squeeze, not lumbar arch.</div>
+                <div class="mistake-item"><div class="mistake-dot"></div>Rushing the concentric — control equals tension equals growth.</div>
+                <div class="mistake-item"><div class="mistake-dot"></div>Knees caving in — keep them in line with toes, push them out slightly.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers">
+                <div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div>
+              </div>
+              <div id="sets-ex-mon-1"></div>
+              <button class="add-set-btn" onclick="addSet('ex-mon-1','MON – Hip Thrust')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-mon-1" placeholder="Session notes (how it felt, form issues, etc.)..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-mon-1','Barbell Hip Thrust')">💾 Save Log</button>
+            </div>
           </div>
-          <div class="ex-row">
-            <div><div class="ex-name">Bulgarian Split Squat</div><div class="ex-note">Lean torso forward ~20° to load glutes over quads.</div></div>
-            <div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div>
-            <div class="ex-num"><div class="ex-num-val small">10–12</div><div class="ex-num-lbl">each</div></div>
+        </div>
+
+        <div class="ex-block" id="ex-mon-2">
+          <div class="ex-top" onclick="toggleEx('ex-mon-2')">
+            <div class="ex-rank">2</div>
+            <div class="ex-info">
+              <div class="ex-name">Romanian Deadlift (RDL)</div>
+              <div class="ex-brief">Hamstring-glute lengthening — slow eccentric</div>
+            </div>
+            <div class="ex-pills">
+              <span class="pill pill-sets">4 sets</span>
+              <span class="pill pill-reps">8–10 reps</span>
+            </div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
           </div>
-          <div class="ex-row">
-            <div><div class="ex-name">Cable Kickback</div><div class="ex-note">Full extension, pause & squeeze 1 sec at top.</div></div>
-            <div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div>
-            <div class="ex-num"><div class="ex-num-val small">15–20</div><div class="ex-num-lbl">each</div></div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> The RDL creates a long-length glute stimulus — it stretches the glute maximus AND hamstrings under load. Research shows stretched-position training creates more muscle damage and hypertrophy signal. The 3-second eccentric multiplies this effect dramatically.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Start standing, bar or dumbbells at hips. Soft bend in knees — maintain this throughout.</div>
+                <div class="cue-item"><div class="cue-dot"></div>HINGE at the hips, not the waist. Send your hips BACK, not your torso down.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Lower for 3 full seconds. Feel the deep stretch in your hamstrings/glutes at the bottom.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Go to just below knee level (or until you feel a strong stretch) — don't round your back.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Drive hips FORWARD to return. Squeeze glutes at the top — not just standing up straight.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Keep bar close to your legs the entire movement. Drag it up your shins mentally.</div>
+              </div>
+            </div>
+            <div class="cue-section" style="margin-top:12px;">
+              <div class="cue-label" style="color:#ff4444;">❌ Common Mistakes</div>
+              <div class="cue-list">
+                <div class="mistake-item"><div class="mistake-dot"></div>Squatting the weight — this is a HINGE, not a squat. Knees should barely move.</div>
+                <div class="mistake-item"><div class="mistake-dot"></div>Rounding the lower back — arch maintained throughout. Spine is neutral.</div>
+                <div class="mistake-item"><div class="mistake-dot"></div>Going too fast — the 3-second descent is the most important part for glute growth.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-mon-2"></div>
+              <button class="add-set-btn" onclick="addSet('ex-mon-2','MON – RDL')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-mon-2" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-mon-2','Romanian Deadlift')">💾 Save Log</button>
+            </div>
           </div>
-          <div class="ex-row">
-            <div><div class="ex-name">Abduction Machine</div><div class="ex-note">Slow & controlled. Constant tension. Do NOT use momentum.</div></div>
-            <div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div>
-            <div class="ex-num"><div class="ex-num-val small">20–25</div><div class="ex-num-lbl">reps</div></div>
+        </div>
+
+        <div class="ex-block" id="ex-mon-3">
+          <div class="ex-top" onclick="toggleEx('ex-mon-3')">
+            <div class="ex-rank">3</div>
+            <div class="ex-info">
+              <div class="ex-name">Bulgarian Split Squat</div>
+              <div class="ex-brief">Unilateral power — lean forward for glutes</div>
+            </div>
+            <div class="ex-pills">
+              <span class="pill pill-sets">3 sets</span>
+              <span class="pill pill-reps">10–12 each</span>
+            </div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> The Bulgarian split squat isolates one leg at a time, exposing and fixing muscle imbalances. Leaning your torso ~20° forward dramatically shifts load from quads to glutes. This is one of the best exercises for glute-dominant leg strength.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Rear foot on bench, front foot far enough forward that your front shin stays near-vertical at the bottom.</div>
+                <div class="cue-item"><div class="cue-dot"></div>LEAN your torso forward about 20° — this is the difference between a quad exercise and a glute exercise.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Lower until rear knee almost touches ground. Front thigh parallel or below.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Drive up through your front heel. Feel the glute of your front leg working.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Keep hips level — don't let the hip of the working leg drop or hike up.</div>
+              </div>
+            </div>
+            <div class="cue-section" style="margin-top:12px;">
+              <div class="cue-label" style="color:#ff4444;">❌ Common Mistakes</div>
+              <div class="cue-list">
+                <div class="mistake-item"><div class="mistake-dot"></div>Staying too upright — switches work from glutes to quads entirely.</div>
+                <div class="mistake-item"><div class="mistake-dot"></div>Front foot too close to bench — creates knee dominant pattern.</div>
+                <div class="mistake-item"><div class="mistake-dot"></div>Letting the knee cave inward — keep it tracking over toes.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-mon-3"></div>
+              <button class="add-set-btn" onclick="addSet('ex-mon-3','MON – BSS')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-mon-3" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-mon-3','Bulgarian Split Squat')">💾 Save Log</button>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="day-card" id="day1">
-      <div class="day-header" onclick="toggleDay('day1')">
-        <div class="day-tag-box" style="background:rgba(78,205,196,.1);border:1px solid rgba(78,205,196,.3);">
-          <span style="color:#4ECDC4;">TUE</span>
+        <div class="ex-block" id="ex-mon-4">
+          <div class="ex-top" onclick="toggleEx('ex-mon-4')">
+            <div class="ex-rank">4</div>
+            <div class="ex-info">
+              <div class="ex-name">Cable Kickback</div>
+              <div class="ex-brief">Isolation — squeeze at full extension</div>
+            </div>
+            <div class="ex-pills">
+              <span class="pill pill-sets">3 sets</span>
+              <span class="pill pill-reps">15–20 each</span>
+            </div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> Cable kickbacks provide constant tension through the full range of motion — unlike machines. The peak glute contraction happens at full hip extension. The 1-second pause at the top is the most important part. This builds the upper glute and creates the round, lifted shape.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Ankle attachment on low cable. Lean slightly forward, holding cable machine for support.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Kick leg BACK and slightly UP — not just back. You want hip hyperextension.</div>
+                <div class="cue-item"><div class="cue-dot"></div>PAUSE for 1 full second at maximum extension. Squeeze glute as hard as possible.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Control the return — don't swing. Keep movement deliberate throughout.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Keep hips square. The moment a hip lifts, you've lost the glute and are using your back.</div>
+              </div>
+            </div>
+            <div class="cue-section" style="margin-top:12px;">
+              <div class="cue-label" style="color:#ff4444;">❌ Common Mistakes</div>
+              <div class="cue-list">
+                <div class="mistake-item"><div class="mistake-dot"></div>Using too much weight and swinging — reduce weight, feel the glute.</div>
+                <div class="mistake-item"><div class="mistake-dot"></div>Skipping the pause — this is where the growth happens. Every rep.</div>
+                <div class="mistake-item"><div class="mistake-dot"></div>Hip rotating — keep your pelvis neutral and stationary.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-mon-4"></div>
+              <button class="add-set-btn" onclick="addSet('ex-mon-4','MON – Cable Kickback')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-mon-4" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-mon-4','Cable Kickback')">💾 Save Log</button>
+            </div>
+          </div>
         </div>
-        <div style="flex:1">
-          <div class="day-tag-label" style="color:#4ECDC4;">Secondary</div>
-          <div class="day-title">UPPER BODY + CORE</div>
-        </div>
-        <div class="day-arrow">▾</div>
-      </div>
-      <div class="day-body">
-        <div class="day-body-inner">
-          <div class="ex-row"><div><div class="ex-name">Lat Pulldown</div><div class="ex-note">Build the V-taper that makes glutes pop visually.</div></div><div class="ex-num"><div class="ex-num-val">4</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">10–12</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Seated Cable Row</div><div class="ex-note">Retract shoulder blades fully.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">10–12</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Dumbbell Shoulder Press</div><div class="ex-note">Neutral grip, controlled tempo.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">12–15</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Plank Hold</div><div class="ex-note">Posterior pelvic tilt to activate glutes even here.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">45–60s</div><div class="ex-num-lbl">time</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Dead Bug</div><div class="ex-note">Slow & deliberate. Core anti-extension.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">10</div><div class="ex-num-lbl">each</div></div></div>
-        </div>
-      </div>
-    </div>
 
-    <div class="day-card" id="day2">
-      <div class="day-header" onclick="toggleDay('day2')">
-        <div class="day-tag-box" style="background:rgba(168,218,220,.08);border:1px solid rgba(168,218,220,.2);">
-          <span style="color:#A8DADC;">WED</span>
+        <div class="ex-block" id="ex-mon-5">
+          <div class="ex-top" onclick="toggleEx('ex-mon-5')">
+            <div class="ex-rank">5</div>
+            <div class="ex-info">
+              <div class="ex-name">Abduction Machine</div>
+              <div class="ex-brief">Glute medius — hip width and outer shape</div>
+            </div>
+            <div class="ex-pills">
+              <span class="pill pill-sets">3 sets</span>
+              <span class="pill pill-reps">20–25 reps</span>
+            </div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> The abduction machine targets the gluteus medius — the muscle on the side of your hip that creates width, roundness from the front, and that coveted "hip dip" filling. It's often undertrained and it's what separates a flat butt from a 3D, full butt.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Sit tall, back against pad. No slouching — you lose core stability and glute activation.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Press legs out SLOWLY — 2 seconds out, 3 seconds back in. Constant tension.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Pause at maximum abduction. Feel the deep glute med squeeze on the outer hip.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Do NOT slam legs together — controlled resistance on the way in is as important as the way out.</div>
+                <div class="cue-item"><div class="cue-dot"></div>To increase glute med activation: lean torso slightly forward.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-mon-5"></div>
+              <button class="add-set-btn" onclick="addSet('ex-mon-5','MON – Abduction')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-mon-5" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-mon-5','Abduction Machine')">💾 Save Log</button>
+            </div>
+          </div>
         </div>
-        <div style="flex:1">
-          <div class="day-tag-label" style="color:#A8DADC;">Rest</div>
-          <div class="day-title">ACTIVE RECOVERY</div>
-        </div>
-        <div class="day-arrow">▾</div>
-      </div>
-      <div class="day-body">
-        <div class="day-body-inner">
-          <div class="ex-row"><div><div class="ex-name">Hip Flexor Stretch</div><div class="ex-note">Tight hip flexors inhibit glute activation. Priority.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">60s</div><div class="ex-num-lbl">each</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Pigeon Pose</div><div class="ex-note">Deep glute release.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">90s</div><div class="ex-num-lbl">each</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Foam Roll Glutes/IT Band</div><div class="ex-note">30–45s per tender spot.</div></div><div class="ex-num"><div class="ex-num-val">—</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">10 min</div><div class="ex-num-lbl">total</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Light Walk / Cycling</div><div class="ex-note">Zone 2 only. Stay conversational.</div></div><div class="ex-num"><div class="ex-num-val">—</div><div class="ex-num-lbl"></div></div><div class="ex-num"><div class="ex-num-val small">20–30m</div><div class="ex-num-lbl">time</div></div></div>
-        </div>
-      </div>
-    </div>
 
-    <div class="day-card" id="day3">
-      <div class="day-header" onclick="toggleDay('day3')">
-        <div class="day-tag-box" style="background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.3);">
-          <span style="color:#FF6B35;">THU</span>
-        </div>
-        <div style="flex:1">
-          <div class="day-tag-label" style="color:#FF6B35;">Primary</div>
-          <div class="day-title">GLUTE & HAMSTRING — VOLUME</div>
-        </div>
-        <div class="day-arrow">▾</div>
-      </div>
-      <div class="day-body">
-        <div class="day-body-inner">
-          <div class="ex-row"><div><div class="ex-name">Smith Machine Squat (Wide Stance)</div><div class="ex-note">Toes out 30–45°, sit back into it, hit depth.</div></div><div class="ex-num"><div class="ex-num-val">4</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">10–12</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Single-Leg Romanian Deadlift</div><div class="ex-note">Balance + unilateral glute strength. Use cable for resistance.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">10</div><div class="ex-num-lbl">each</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Sumo Deadlift</div><div class="ex-note">Wide stance activates more inner glute/hip.</div></div><div class="ex-num"><div class="ex-num-val">4</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">6–8</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Glute Dominant Leg Press (feet high)</div><div class="ex-note">Feet high on platform = glutes, not quads.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">15–20</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Lying Hamstring Curl</div><div class="ex-note">Slow negative (3 sec). Hamstrings = bottom half of the booty look.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">12–15</div><div class="ex-num-lbl">reps</div></div></div>
+        <div style="margin-top:20px;text-align:center;">
+          <button class="btn-primary" onclick="completeWorkout('Monday','🔥 Glute Heavy')">✅ Mark Monday Complete</button>
         </div>
       </div>
-    </div>
-
-    <div class="day-card" id="day4">
-      <div class="day-header" onclick="toggleDay('day4')">
-        <div class="day-tag-box" style="background:rgba(78,205,196,.1);border:1px solid rgba(78,205,196,.3);">
-          <span style="color:#4ECDC4;">FRI</span>
-        </div>
-        <div style="flex:1">
-          <div class="day-tag-label" style="color:#4ECDC4;">Secondary</div>
-          <div class="day-title">UPPER BODY + LIGHT GLUTES</div>
-        </div>
-        <div class="day-arrow">▾</div>
-      </div>
-      <div class="day-body">
-        <div class="day-body-inner">
-          <div class="ex-row"><div><div class="ex-name">Incline Dumbbell Press</div><div class="ex-note">Balanced physique matters.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">10–12</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Cable Face Pull</div><div class="ex-note">Shoulder health. Non-negotiable.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">15–20</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Resistance Band Glute Bridge</div><div class="ex-note">Band just above knees. Keep constant tension.</div></div><div class="ex-num"><div class="ex-num-val">4</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">20–25</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Banded Clamshell</div><div class="ex-note">Side-lying. Gluteus medius = hip width.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">20</div><div class="ex-num-lbl">each</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Tricep Rope Pushdown</div><div class="ex-note"></div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">12–15</div><div class="ex-num-lbl">reps</div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="day-card" id="day5">
-      <div class="day-header" onclick="toggleDay('day5')">
-        <div class="day-tag-box" style="background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.3);">
-          <span style="color:#FF6B35;">SAT</span>
-        </div>
-        <div style="flex:1">
-          <div class="day-tag-label" style="color:#FF6B35;">Primary</div>
-          <div class="day-title">GLUTE FOCUSED — PUMP & SHAPE</div>
-        </div>
-        <div class="day-arrow">▾</div>
-      </div>
-      <div class="day-body">
-        <div class="day-body-inner">
-          <div class="ex-row"><div><div class="ex-name">Hip Thrust Machine (or Barbell)</div><div class="ex-note">Slightly lighter than Monday. Squeeze for 2 sec at top EVERY rep.</div></div><div class="ex-num"><div class="ex-num-val">4</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">12–15</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Curtsy Lunge</div><div class="ex-note">Hits glute med & shape from the side.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">12</div><div class="ex-num-lbl">each</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Donkey Kick Machine / Cable</div><div class="ex-note">Full extension, point toe slightly down.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">15</div><div class="ex-num-lbl">each</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Frog Pump</div><div class="ex-note">Feet together, soles touching. High rep. Brutal glute burnout.</div></div><div class="ex-num"><div class="ex-num-val">3</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">25–30</div><div class="ex-num-lbl">reps</div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Abduction Machine — Drop Set</div><div class="ex-note">Drop weight twice with no rest. Finish with the burn.</div></div><div class="ex-num"><div class="ex-num-val">2</div><div class="ex-num-lbl">sets</div></div><div class="ex-num"><div class="ex-num-val small">20×3</div><div class="ex-num-lbl">drops</div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="day-card" id="day6">
-      <div class="day-header" onclick="toggleDay('day6')">
-        <div class="day-tag-box" style="background:rgba(168,218,220,.08);border:1px solid rgba(168,218,220,.2);">
-          <span style="color:#A8DADC;">SUN</span>
-        </div>
-        <div style="flex:1">
-          <div class="day-tag-label" style="color:#A8DADC;">Rest</div>
-          <div class="day-title">FULL REST</div>
-        </div>
-        <div class="day-arrow">▾</div>
-      </div>
-      <div class="day-body">
-        <div class="day-body-inner">
-          <div class="ex-row"><div><div class="ex-name">Sleep 8+ hours</div><div class="ex-note">Muscle is built at rest. This day is as important as training days.</div></div><div class="ex-num"><div class="ex-num-val">—</div><div class="ex-num-lbl"></div></div><div class="ex-num"><div class="ex-num-val small">—</div><div class="ex-num-lbl"></div></div></div>
-          <div class="ex-row"><div><div class="ex-name">Optional: 20 min walk</div><div class="ex-note">Low intensity only.</div></div><div class="ex-num"><div class="ex-num-val">—</div><div class="ex-num-lbl"></div></div><div class="ex-num"><div class="ex-num-val small">20m</div><div class="ex-num-lbl">time</div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="prog-box">
-      <h3>Progression Protocol</h3>
-      <div class="prog-row"><div class="prog-phase">Weeks 1–4</div><div class="prog-desc">Learn the movements. Focus on form, depth, and the mind-muscle connection. Use moderate weight.</div></div>
-      <div class="prog-row"><div class="prog-phase">Weeks 5–8</div><div class="prog-desc">Add weight every session. Track every lift. Aim for RPE 8–9 on main compounds.</div></div>
-      <div class="prog-row"><div class="prog-phase">Weeks 9–12</div><div class="prog-desc">Introduce techniques: pause reps at top of hip thrust, 3-second negatives on RDL.</div></div>
-      <div class="prog-row"><div class="prog-phase">Weeks 13–16</div><div class="prog-desc">Deload week at 16 then reassess. By now you will see and feel significant change.</div></div>
     </div>
   </div>
 
-  <!-- DIET -->
-  <div id="diet" class="section">
-    <div class="macro-grid">
-      <div class="macro-card" style="border:1px solid rgba(255,107,53,.3)"><div class="macro-val" style="color:#FF6B35">~1,900</div><div class="macro-lbl">Calories</div></div>
-      <div class="macro-card" style="border:1px solid rgba(78,205,196,.3)"><div class="macro-val" style="color:#4ECDC4">155g</div><div class="macro-lbl">Protein</div></div>
-      <div class="macro-card" style="border:1px solid rgba(255,230,109,.3)"><div class="macro-val" style="color:#FFE66D">180g</div><div class="macro-lbl">Carbs</div></div>
-    </div>
-    <p class="diet-note"><span style="color:#FF6B35">Strategy:</span> Slight caloric deficit of ~200kcal to lose body fat while maintaining high protein to preserve and build muscle. Carbs are strategically placed around workouts. This is a <em>recomp</em> — you will lose fat AND gain muscle simultaneously.</p>
-
-    <div class="meal-card">
-      <div><div class="meal-icon">🌅</div><div class="meal-time">7:00 AM</div></div>
-      <div>
-        <div class="meal-title">Breakfast</div>
-        <div class="meal-food"><span class="dot"></span>4 egg whites + 1 whole egg scrambled</div>
-        <div class="meal-food"><span class="dot"></span>½ cup oats with 1 tbsp almond butter</div>
-        <div class="meal-food"><span class="dot"></span>1 banana</div>
+  <!-- THURSDAY -->
+  <div class="day-card" id="d3">
+    <div class="day-header" onclick="toggleDay('d3')">
+      <div class="day-abbr" style="background:rgba(255,107,53,.12);border:1px solid rgba(255,107,53,.25);color:var(--orange);">THU</div>
+      <div class="day-info">
+        <div class="day-type" style="color:var(--orange);">🔥 Primary Glute — Volume</div>
+        <div class="day-name">Glute & Hamstring Volume</div>
+        <div class="day-meta">5 exercises · ~80 min · High rep ranges, compound focus</div>
       </div>
-      <div><div class="meal-kcal-val">490</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:#4ECDC4">P: 35g</div><div style="color:#FFE66D">C: 60g</div><div style="color:#A8DADC">F: 12g</div></div></div>
+      <div class="day-chevron">▾</div>
     </div>
+    <div class="day-body">
+      <div class="day-body-inner">
 
-    <div class="meal-card">
-      <div><div class="meal-icon">🥛</div><div class="meal-time">10:00 AM</div></div>
-      <div>
-        <div class="meal-title">Mid-Morning Snack</div>
-        <div class="meal-food"><span class="dot"></span>Greek yogurt (full fat, 150g)</div>
-        <div class="meal-food"><span class="dot"></span>1 tbsp honey</div>
-        <div class="meal-food"><span class="dot"></span>Handful of walnuts (20g)</div>
+        <div class="ex-block" id="ex-thu-1">
+          <div class="ex-top" onclick="toggleEx('ex-thu-1')">
+            <div class="ex-rank">1</div>
+            <div class="ex-info">
+              <div class="ex-name">Sumo Deadlift</div>
+              <div class="ex-brief">Wide stance = inner glute + hip activation</div>
+            </div>
+            <div class="ex-pills"><span class="pill pill-sets">4 sets</span><span class="pill pill-reps">6–8 reps</span></div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> The sumo deadlift's wide stance and turned-out toes engage the inner glutes (adductor magnus) and outer glutes simultaneously — giving a different stimulus than conventional. It's especially powerful for building glute width and depth.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Feet WIDE — roughly 1.5x shoulder width. Toes pointed out 35–45°.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Grip inside your legs, hands narrow. Bar stays over mid-foot.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Push the floor APART with your feet as you drive upward — this activates glutes maximally.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Hips and shoulders rise at the SAME rate. Don't let your hips shoot up first.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Squeeze glutes hard at the top lockout. Think: "crush a walnut."</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-thu-1"></div>
+              <button class="add-set-btn" onclick="addSet('ex-thu-1','THU – Sumo DL')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-thu-1" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-thu-1','Sumo Deadlift')">💾 Save Log</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-block" id="ex-thu-2">
+          <div class="ex-top" onclick="toggleEx('ex-thu-2')">
+            <div class="ex-rank">2</div>
+            <div class="ex-info">
+              <div class="ex-name">Smith Machine Wide-Stance Squat</div>
+              <div class="ex-brief">Toes out, sit BACK — glute dominant squat</div>
+            </div>
+            <div class="ex-pills"><span class="pill pill-sets">4 sets</span><span class="pill pill-reps">10–12 reps</span></div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> By using a wide stance and sitting back into the squat rather than down, you shift the primary load from quads to glutes. The Smith machine allows you to position your feet further forward, making this even more glute-dominant. Deep range of motion = maximum glute stretch at the bottom.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Set feet WIDE, toes out 30–45°. Position feet slightly forward of the bar.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Sit your hips BACK and DOWN. Think: sitting back onto a chair that's behind you.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Hit DEPTH — thighs parallel or below. Shallow squats barely touch the glutes.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Drive through heels, push knees out over toes on the way up.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Pause for 1 second at the bottom to remove elastic rebound and maximize glute recruitment.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-thu-2"></div>
+              <button class="add-set-btn" onclick="addSet('ex-thu-2','THU – Smith Squat')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-thu-2" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-thu-2','Wide Stance Squat')">💾 Save Log</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-block" id="ex-thu-3">
+          <div class="ex-top" onclick="toggleEx('ex-thu-3')">
+            <div class="ex-rank">3</div>
+            <div class="ex-info">
+              <div class="ex-name">Glute-Dominant Leg Press (Feet High)</div>
+              <div class="ex-brief">High foot placement = glutes over quads</div>
+            </div>
+            <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">15–20 reps</span></div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> Where you place your feet on the leg press completely changes what muscle is working. HIGH foot placement changes the hip angle, dramatically increasing glute and hamstring involvement. This is a high-volume finisher that keeps muscle under tension for extended time.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Place feet HIGH on the platform — near the top. Shoulder-width to wide. Toes slightly out.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Lower the platform slowly until you feel a deep glute stretch — go LOW, but keep lower back on the pad.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Push through HEELS and the whole foot — not the balls of your feet.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Don't fully lockout — keep tension on the muscle. Stop just before knees fully extend.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Higher reps here — aim for that deep burning sensation in the glutes. That burn is growth.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-thu-3"></div>
+              <button class="add-set-btn" onclick="addSet('ex-thu-3','THU – Leg Press')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-thu-3" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-thu-3','High Leg Press')">💾 Save Log</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-block" id="ex-thu-4">
+          <div class="ex-top" onclick="toggleEx('ex-thu-4')">
+            <div class="ex-rank">4</div>
+            <div class="ex-info">
+              <div class="ex-name">Single-Leg RDL (Cable)</div>
+              <div class="ex-brief">Balance + unilateral glute strength</div>
+            </div>
+            <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">10 each</span></div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> The single-leg RDL fixes muscle imbalances between glutes, improves hip stability, and forces each glute to work independently. If one glute is dominant (very common), this exercise corrects it. The cable provides constant tension unlike dumbbells.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Hold cable in opposite hand to working leg. Stand on one foot, soft knee bend.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Hinge forward at the hip, free leg extends straight back — body forms a T shape at bottom.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Keep hips SQUARE to the ground. The hip of the lifted leg wants to open — resist this hard.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Return by driving the standing hip FORWARD — feel it in the glute of the standing leg.</div>
+                <div class="cue-item"><div class="cue-dot"></div>If balance is the issue, lightly touch a wall with a finger — do NOT grip for support.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-thu-4"></div>
+              <button class="add-set-btn" onclick="addSet('ex-thu-4','THU – SL RDL')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-thu-4" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-thu-4','Single-Leg RDL')">💾 Save Log</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-block" id="ex-thu-5">
+          <div class="ex-top" onclick="toggleEx('ex-thu-5')">
+            <div class="ex-rank">5</div>
+            <div class="ex-info">
+              <div class="ex-name">Lying Hamstring Curl</div>
+              <div class="ex-brief">Hamstring = bottom half of the booty look</div>
+            </div>
+            <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">12–15 reps</span></div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> Strong, developed hamstrings give the glute its bottom projection and create the "under-butt" line. The 3-second negative (lowering phase) creates maximum mechanical tension. Most people skip this and have underdeveloped lower glute-ham area as a result.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Lie face down. Pad sits just above the ankle, NOT on the Achilles tendon.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Curl up explosively — 1 second up.</div>
+                <div class="cue-item"><div class="cue-dot"></div>LOWER for 3 seconds — this eccentric is where the most damage and growth happen.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Squeeze glutes slightly as you curl — it stabilizes the pelvis and increases hamstring peak contraction.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Point toes toward you (dorsiflexion) to increase hamstring recruitment.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-thu-5"></div>
+              <button class="add-set-btn" onclick="addSet('ex-thu-5','THU – Ham Curl')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-thu-5" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-thu-5','Hamstring Curl')">💾 Save Log</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;text-align:center;">
+          <button class="btn-primary" onclick="completeWorkout('Thursday','🔥 Glute Volume')">✅ Mark Thursday Complete</button>
+        </div>
       </div>
-      <div><div class="meal-kcal-val">278</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:#4ECDC4">P: 18g</div><div style="color:#FFE66D">C: 20g</div><div style="color:#A8DADC">F: 14g</div></div></div>
-    </div>
-
-    <div class="meal-card">
-      <div><div class="meal-icon">🍗</div><div class="meal-time">1:00 PM</div></div>
-      <div>
-        <div class="meal-title">Lunch</div>
-        <div class="meal-food"><span class="dot"></span>150g chicken breast (grilled)</div>
-        <div class="meal-food"><span class="dot"></span>1 cup white rice</div>
-        <div class="meal-food"><span class="dot"></span>½ avocado + large salad with olive oil</div>
-      </div>
-      <div><div class="meal-kcal-val">562</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:#4ECDC4">P: 45g</div><div style="color:#FFE66D">C: 55g</div><div style="color:#A8DADC">F: 18g</div></div></div>
-    </div>
-
-    <div class="meal-card">
-      <div><div class="meal-icon">⚡</div><div class="meal-time">3:30 PM</div></div>
-      <div>
-        <div class="meal-title">Pre-Workout</div>
-        <div class="meal-food"><span class="dot"></span>1 rice cake with 1 tbsp peanut butter</div>
-        <div class="meal-food"><span class="dot"></span>1 medium apple</div>
-        <div class="meal-food"><span class="dot"></span>Coffee (black) or pre-workout</div>
-      </div>
-      <div><div class="meal-kcal-val">228</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:#4ECDC4">P: 5g</div><div style="color:#FFE66D">C: 35g</div><div style="color:#A8DADC">F: 8g</div></div></div>
-    </div>
-
-    <div class="meal-card">
-      <div><div class="meal-icon">💪</div><div class="meal-time">6:30 PM</div></div>
-      <div>
-        <div class="meal-title">Post-Workout</div>
-        <div class="meal-food"><span class="dot"></span>Protein shake (25–30g whey isolate)</div>
-        <div class="meal-food"><span class="dot"></span>1 cup white rice or baked potato</div>
-        <div class="meal-food"><span class="dot"></span>1 cup steamed vegetables</div>
-      </div>
-      <div><div class="meal-kcal-val">387</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:#4ECDC4">P: 35g</div><div style="color:#FFE66D">C: 55g</div><div style="color:#A8DADC">F: 3g</div></div></div>
-    </div>
-
-    <div class="meal-card">
-      <div><div class="meal-icon">🐟</div><div class="meal-time">9:00 PM</div></div>
-      <div>
-        <div class="meal-title">Dinner</div>
-        <div class="meal-food"><span class="dot"></span>150g salmon or lean beef</div>
-        <div class="meal-food"><span class="dot"></span>Roasted sweet potato (100g)</div>
-        <div class="meal-food"><span class="dot"></span>Steamed broccoli + drizzle of olive oil</div>
-      </div>
-      <div><div class="meal-kcal-val">424</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:#4ECDC4">P: 40g</div><div style="color:#FFE66D">C: 30g</div><div style="color:#A8DADC">F: 16g</div></div></div>
-    </div>
-
-    <div class="supp-box">
-      <h3>Supplement Stack (Optional)</h3>
-      <div class="supp-row"><div class="supp-top"><span class="supp-name">Creatine Monohydrate</span><span class="supp-dose">5g daily</span></div><div class="supp-note">Most researched. Increases strength output by 5–15%.</div></div>
-      <div class="supp-row"><div class="supp-top"><span class="supp-name">Whey Isolate</span><span class="supp-dose">25–30g post-workout</span></div><div class="supp-note">Fast-absorbing. Hit your protein target.</div></div>
-      <div class="supp-row"><div class="supp-top"><span class="supp-name">Caffeine / Pre-workout</span><span class="supp-dose">Pre-training</span></div><div class="supp-note">Performance & focus. No later than 2pm.</div></div>
-      <div class="supp-row"><div class="supp-top"><span class="supp-name">Magnesium Glycinate</span><span class="supp-dose">300mg before bed</span></div><div class="supp-note">Sleep quality, recovery, reduces cortisol.</div></div>
     </div>
   </div>
 
-  <!-- TIPS -->
-  <div id="tips" class="section">
-    <p class="tips-intro">These are the 20% of factors that produce 80% of your results. Non-negotiables.</p>
-    <div class="tips-grid">
-      <div class="tip-card"><div class="tip-icon">🎯</div><div><div class="tip-title">Mind-Muscle Connection</div><div class="tip-body">Before every set, squeeze your glutes 3 times. Think about the muscle contracting. This alone can increase activation by 30%+</div></div></div>
-      <div class="tip-card"><div class="tip-icon">📈</div><div><div class="tip-title">Progressive Overload</div><div class="tip-body">Add 2.5kg OR 1 rep per week minimum. If you're not tracking your lifts, you're guessing. Keep a log.</div></div></div>
-      <div class="tip-card"><div class="tip-icon">😴</div><div><div class="tip-title">Sleep = Growth</div><div class="tip-body">HGH peaks during deep sleep. 7–9 hours is non-negotiable for muscle building. Less sleep = less gains, more fat retention.</div></div></div>
-      <div class="tip-card"><div class="tip-icon">💧</div><div><div class="tip-title">Hydration</div><div class="tip-body">3L of water daily minimum. Muscle is 75% water. Performance drops at 2% dehydration.</div></div></div>
-      <div class="tip-card"><div class="tip-icon">🔥</div><div><div class="tip-title">Calorie Surplus Strategy</div><div class="tip-body">Aim for +150–200kcal above TDEE (~1,900 kcal). Tiny surplus = lean muscle gain with minimal fat.</div></div></div>
-      <div class="tip-card"><div class="tip-icon">📅</div><div><div class="tip-title">Menstrual Cycle Training</div><div class="tip-body">Follicular phase (days 1–14): go heavy, PRs. Luteal phase (days 15–28): emphasize volume, accessory work.</div></div></div>
+  <!-- SATURDAY -->
+  <div class="day-card" id="d5">
+    <div class="day-header" onclick="toggleDay('d5')">
+      <div class="day-abbr" style="background:rgba(255,107,53,.12);border:1px solid rgba(255,107,53,.25);color:var(--orange);">SAT</div>
+      <div class="day-info">
+        <div class="day-type" style="color:var(--orange);">🔥 Primary Glute — Pump & Shape</div>
+        <div class="day-name">Glute Pump & Isolation Day</div>
+        <div class="day-meta">5 exercises · ~65 min · Moderate weight, feel every rep</div>
+      </div>
+      <div class="day-chevron">▾</div>
     </div>
-    <div class="timeline-box">
-      <h3>What to Expect — Realistic Timeline</h3>
-      <div class="tl-row"><div class="tl-dot-col"><div class="tl-dot" style="background:#FF6B35"></div><div class="tl-line"></div></div><div><div class="tl-phase" style="color:#FF6B35">Weeks 1–2</div><div class="tl-desc">Soreness. Newness. You will feel your glutes 24–48hrs after sessions. That's growth.</div></div></div>
-      <div class="tl-row"><div class="tl-dot-col"><div class="tl-dot" style="background:#4ECDC4"></div><div class="tl-line"></div></div><div><div class="tl-phase" style="color:#4ECDC4">Weeks 3–6</div><div class="tl-desc">Strength increases fast. Form clicks. You will add weight every session.</div></div></div>
-      <div class="tl-row"><div class="tl-dot-col"><div class="tl-dot" style="background:#FFE66D"></div><div class="tl-line"></div></div><div><div class="tl-phase" style="color:#FFE66D">Weeks 6–10</div><div class="tl-desc">Visible shape begins. Jeans fit differently. 2–3kg of fat lost, muscle firm.</div></div></div>
-      <div class="tl-row"><div class="tl-dot-col"><div class="tl-dot" style="background:#FF6B35"></div></div><div><div class="tl-phase" style="color:#FF6B35">Weeks 12–16</div><div class="tl-desc">Significant transformation. Glute shape, roundness, and lift visible in mirror.</div></div></div>
+    <div class="day-body">
+      <div class="day-body-inner">
+
+        <div class="ex-block" id="ex-sat-1">
+          <div class="ex-top" onclick="toggleEx('ex-sat-1')">
+            <div class="ex-rank">1</div>
+            <div class="ex-info">
+              <div class="ex-name">Hip Thrust — Paused</div>
+              <div class="ex-brief">2-second hold at top, every single rep</div>
+            </div>
+            <div class="ex-pills"><span class="pill pill-sets">4 sets</span><span class="pill pill-reps">12–15 reps</span></div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> Saturday's hip thrust is slightly lighter than Monday but with a mandatory 2-second pause at the top. This pause eliminates all momentum and forces the glute to sustain full maximal contraction. It's brutal. It works. The pump from this will be intense.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Same setup as Monday. Use 10–20% less weight than your Monday heavy sets.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Drive up, reach the top — then COUNT TWO SECONDS while squeezing as hard as possible.</div>
+                <div class="cue-item"><div class="cue-dot"></div>During the pause: press knees out, tuck tailbone, and imagine squeezing something between your cheeks.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Lower controlled. Rest 90 seconds between sets — not more. The pump is the point today.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-sat-1"></div>
+              <button class="add-set-btn" onclick="addSet('ex-sat-1','SAT – Hip Thrust Paused')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-sat-1" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-sat-1','Paused Hip Thrust')">💾 Save Log</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-block" id="ex-sat-2">
+          <div class="ex-top" onclick="toggleEx('ex-sat-2')">
+            <div class="ex-rank">2</div>
+            <div class="ex-info">
+              <div class="ex-name">Curtsy Lunge</div>
+              <div class="ex-brief">Glute med + shape from the side</div>
+            </div>
+            <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">12 each</span></div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> The curtsy lunge targets the gluteus medius at a unique angle that regular lunges completely miss. This creates the lateral shape and roundness that's visible from the front and side. Essential for a full, 3D glute look.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Stand feet hip-width. Step one foot diagonally BEHIND the other — like a curtsy bow.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Lower your back knee toward the ground, keeping front shin vertical or near-vertical.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Keep your torso upright and chest up. Feel the squeeze in the outer hip of the FRONT leg.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Drive back to standing through the heel of the front foot.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Add dumbbells once you've mastered the movement pattern.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-sat-2"></div>
+              <button class="add-set-btn" onclick="addSet('ex-sat-2','SAT – Curtsy Lunge')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-sat-2" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-sat-2','Curtsy Lunge')">💾 Save Log</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-block" id="ex-sat-3">
+          <div class="ex-top" onclick="toggleEx('ex-sat-3')">
+            <div class="ex-rank">3</div>
+            <div class="ex-info">
+              <div class="ex-name">Cable Donkey Kick</div>
+              <div class="ex-brief">Upper glute shape — full extension focus</div>
+            </div>
+            <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">15 each</span></div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> The donkey kick specifically targets the upper portion of the glute maximus and creates that lifted, rounded look at the top of the butt. Full hip extension with a pointed toe creates maximum activation at the top.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>On all fours or kneeling. Cable attached at ankle. Start with knee bent 90°.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Kick back AND upward — extend the hip fully. At the top, slightly point the toe downward.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Hold for 1 second at maximum extension. Your glute should be screaming.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Keep hips level — don't let the working hip open to the side.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Keep your core braced — don't let your lower back arch to compensate.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-sat-3"></div>
+              <button class="add-set-btn" onclick="addSet('ex-sat-3','SAT – Donkey Kick')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-sat-3" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-sat-3','Donkey Kick')">💾 Save Log</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-block" id="ex-sat-4">
+          <div class="ex-top" onclick="toggleEx('ex-sat-4')">
+            <div class="ex-rank">4</div>
+            <div class="ex-info">
+              <div class="ex-name">Frog Pump</div>
+              <div class="ex-brief">High-rep burnout — maximum glute squeeze</div>
+            </div>
+            <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">25–30 reps</span></div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> The frog pump is a high-rep isolation move that targets the inner glutes with feet together. Because your hips are externally rotated, the quads are at a mechanical disadvantage — meaning 100% of the load goes to glutes. By the 25th rep, you should feel an intense glute burn. That's the goal.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ Key Coaching Cues</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Lie on your back. Bring soles of feet TOGETHER, knees fall out wide (like a butterfly stretch).</div>
+                <div class="cue-item"><div class="cue-dot"></div>Drive hips UP using only your glutes — not your back or hamstrings.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Squeeze HARD at the top. You will feel this in places normal squats don't reach.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Short range of motion is fine — the squeeze at the top is everything.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Add a plate on the hips once bodyweight becomes easy.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-sat-4"></div>
+              <button class="add-set-btn" onclick="addSet('ex-sat-4','SAT – Frog Pump')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-sat-4" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-sat-4','Frog Pump')">💾 Save Log</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-block" id="ex-sat-5">
+          <div class="ex-top" onclick="toggleEx('ex-sat-5')">
+            <div class="ex-rank">5</div>
+            <div class="ex-info">
+              <div class="ex-name">Abduction Machine — Drop Set</div>
+              <div class="ex-brief">20+20+20 reps, drop weight, no rest between</div>
+            </div>
+            <div class="ex-pills"><span class="pill pill-sets">2 sets</span><span class="pill pill-reps">20+20+20</span></div>
+            <div class="ex-chevron" style="margin-left:8px;">▾</div>
+          </div>
+          <div class="ex-expand">
+            <div class="glute-focus">
+              <strong>🍑 Glute Focus:</strong> This drop set finisher forces the gluteus medius to failure through descending intensity. By the third drop, the muscle is completely fatigued and flooded with blood. This metabolic stress is one of the most powerful drivers of hypertrophy. It will BURN.
+            </div>
+            <div class="cue-section">
+              <div class="cue-label">✅ How to Perform the Drop Set</div>
+              <div class="cue-list">
+                <div class="cue-item"><div class="cue-dot"></div>Start at your working weight. Do 20 reps with good form.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Immediately drop weight by ~30%. Do 20 more reps. No rest.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Immediately drop again by ~30%. Final 20 reps. It should feel impossible.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Rest 2 minutes. Then repeat the whole thing one more time.</div>
+                <div class="cue-item"><div class="cue-dot"></div>Throughout all reps: slow controlled movement, squeeze at the top, don't slam.</div>
+              </div>
+            </div>
+            <div class="log-section">
+              <div class="log-label">📝 Log This Exercise</div>
+              <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+              <div id="sets-ex-sat-5"></div>
+              <button class="add-set-btn" onclick="addSet('ex-sat-5','SAT – Abduction Drop Set')">+ Add set</button>
+              <textarea class="log-note" id="note-ex-sat-5" placeholder="Notes..."></textarea>
+              <button class="save-log-btn" onclick="saveExerciseLog('ex-sat-5','Abduction Drop Set')">💾 Save Log</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;text-align:center;">
+          <button class="btn-primary" onclick="completeWorkout('Saturday','🍑 Glute Pump')">✅ Mark Saturday Complete</button>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- SECONDARY DAYS -->
+  <div class="day-card" id="d1">
+    <div class="day-header" onclick="toggleDay('d1')">
+      <div class="day-abbr" style="background:rgba(78,205,196,.1);border:1px solid rgba(78,205,196,.25);color:var(--teal);">TUE</div>
+      <div class="day-info">
+        <div class="day-type" style="color:var(--teal);">Secondary</div>
+        <div class="day-name">Upper Body + Core</div>
+        <div class="day-meta">5 exercises · ~55 min · V-taper builds glute contrast</div>
+      </div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-body"><div class="day-body-inner">
+      <div class="info-box" style="margin-top:0;margin-bottom:18px;"><p><span class="accent">Why upper body?</span> A wider back and shoulders create a V-taper that makes your hips and glutes appear dramatically larger by contrast. This is not optional — it's part of the visual result.</p></div>
+
+      <div class="ex-block" id="ex-tue-1">
+        <div class="ex-top" onclick="toggleEx('ex-tue-1')">
+          <div class="ex-rank">1</div>
+          <div class="ex-info"><div class="ex-name">Lat Pulldown</div><div class="ex-brief">Build back width — makes waist look smaller</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">4 sets</span><span class="pill pill-reps">10–12 reps</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>💡 Why this matters:</strong> The wider your lats, the more your waist appears narrow and hips wide. A strong V-taper is one of the most powerful visual tools for making glutes look bigger without adding a single cm to them.</div>
+          <div class="cue-section"><div class="cue-label">✅ Key Coaching Cues</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Wide overhand grip, slightly wider than shoulder width. Lean back 10–15° from vertical.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Pull the bar to your upper chest — think "elbows to your back pockets."</div>
+            <div class="cue-item"><div class="cue-dot"></div>Initiate the pull by depressing your shoulder blades DOWN first, then drive elbows down.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Controlled 3-second return. Full stretch at the top — let lats lengthen completely.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Do NOT pull with your biceps. Think of your hands as hooks — the back does the work.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This Exercise</div>
+            <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-tue-1"></div>
+            <button class="add-set-btn" onclick="addSet('ex-tue-1','TUE – Lat Pulldown')">+ Add set</button>
+            <textarea class="log-note" id="note-ex-tue-1" placeholder="Notes..."></textarea>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-tue-1','Lat Pulldown')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-tue-2">
+        <div class="ex-top" onclick="toggleEx('ex-tue-2')">
+          <div class="ex-rank">2</div>
+          <div class="ex-info"><div class="ex-name">Seated Cable Row</div><div class="ex-brief">Mid-back thickness + posture</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">10–12 reps</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>💡 Why this matters:</strong> A strong, upright posture from back development makes your glutes project more. Rounded shoulders and a hunched back visually flatten the entire posterior chain.</div>
+          <div class="cue-section"><div class="cue-label">✅ Key Coaching Cues</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Sit tall, slight bend in knees. Start with arms extended and a full stretch in the lats.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Row by driving elbows straight back — squeeze shoulder blades together at the end.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Hold the squeeze for 1 second. Feel both shoulder blades pinching toward your spine.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Return slowly — 3 seconds — let the lats stretch fully before the next rep.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Keep torso upright throughout. Do NOT swing back and forth — that's momentum, not muscle.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This Exercise</div>
+            <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-tue-2"></div>
+            <button class="add-set-btn" onclick="addSet('ex-tue-2','TUE – Cable Row')">+ Add set</button>
+            <textarea class="log-note" id="note-ex-tue-2" placeholder="Notes..."></textarea>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-tue-2','Seated Cable Row')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-tue-3">
+        <div class="ex-top" onclick="toggleEx('ex-tue-3')">
+          <div class="ex-rank">3</div>
+          <div class="ex-info"><div class="ex-name">Dumbbell Shoulder Press</div><div class="ex-brief">Shoulder width — frames the whole physique</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">12–15 reps</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>💡 Why this matters:</strong> Wider shoulders create the optical illusion of a narrower waist and wider hips. The shoulder-to-hip ratio is one of the primary visual signals that creates an hourglass silhouette.</div>
+          <div class="cue-section"><div class="cue-label">✅ Key Coaching Cues</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Sit on a bench with back support. Dumbbells at shoulder height, palms facing forward or neutral.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Press straight up — don't let the dumbbells drift forward. Elbows track slightly in front of the body.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Stop just before lockout at the top — keep tension on the deltoid.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Lower controlled in 2–3 seconds. Feel the shoulder stretching at the bottom.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Keep core braced — no lower back arch. If you're arching, the weight is too heavy.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This Exercise</div>
+            <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-tue-3"></div>
+            <button class="add-set-btn" onclick="addSet('ex-tue-3','TUE – Shoulder Press')">+ Add set</button>
+            <textarea class="log-note" id="note-ex-tue-3" placeholder="Notes..."></textarea>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-tue-3','DB Shoulder Press')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-tue-4">
+        <div class="ex-top" onclick="toggleEx('ex-tue-4')">
+          <div class="ex-rank">4</div>
+          <div class="ex-info"><div class="ex-name">Plank Hold</div><div class="ex-brief">Posterior pelvic tilt — activates glutes even here</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">45–60 sec</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>💡 Why this matters:</strong> A strong anterior core (abs) is essential for hip thrust and deadlift strength — it's what keeps your pelvis stable when loading heavy. Weak core = unstable pelvis = reduced glute output.</div>
+          <div class="cue-section"><div class="cue-label">✅ Key Coaching Cues</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Forearms on the floor, elbows under shoulders. Body forms a straight line heel to head.</div>
+            <div class="cue-item"><div class="cue-dot"></div>POSTERIOR PELVIC TILT — tuck your tailbone slightly under. This fires your glutes during the plank.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Squeeze your glutes deliberately throughout the hold. Don't let them relax.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Breathe — don't hold your breath. Exhale forcefully to increase core activation.</div>
+            <div class="cue-item"><div class="cue-dot"></div>If 60s is easy, add a weight plate on your back or extend to 90 seconds.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This Exercise</div>
+            <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Time (sec)</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-tue-4"></div>
+            <button class="add-set-btn" onclick="addSet('ex-tue-4','TUE – Plank')">+ Add set</button>
+            <textarea class="log-note" id="note-ex-tue-4" placeholder="Notes..."></textarea>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-tue-4','Plank Hold')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-tue-5">
+        <div class="ex-top" onclick="toggleEx('ex-tue-5')">
+          <div class="ex-rank">5</div>
+          <div class="ex-info"><div class="ex-name">Dead Bug</div><div class="ex-brief">Anti-extension core — spine stability</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">10 each side</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>💡 Why this matters:</strong> The dead bug trains your core to resist extension — the exact demand placed on it during heavy hip thrusts and deadlifts. Mastering this movement directly carries over to heavier glute training.</div>
+          <div class="cue-section"><div class="cue-label">✅ Key Coaching Cues</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Lie on your back. Arms straight up toward ceiling. Knees bent 90°, shins parallel to floor.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Press your lower back FLAT into the floor — it must stay flat the entire movement.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Slowly lower opposite arm and leg simultaneously — exhale throughout the movement.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Lower ONLY as far as your back stays flat. The moment it arches, you've gone too far.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Return slowly. 3–4 seconds each way. Speed kills the effectiveness of this exercise.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This Exercise</div>
+            <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-tue-5"></div>
+            <button class="add-set-btn" onclick="addSet('ex-tue-5','TUE – Dead Bug')">+ Add set</button>
+            <textarea class="log-note" id="note-ex-tue-5" placeholder="Notes..."></textarea>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-tue-5','Dead Bug')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;text-align:center;"><button class="btn-primary" onclick="completeWorkout('Tuesday','Upper Body')">✅ Mark Tuesday Complete</button></div>
+    </div></div>
+  </div>
+
+  <div class="day-card" id="d4">
+    <div class="day-header" onclick="toggleDay('d4')">
+      <div class="day-abbr" style="background:rgba(78,205,196,.1);border:1px solid rgba(78,205,196,.25);color:var(--teal);">FRI</div>
+      <div class="day-info">
+        <div class="day-type" style="color:var(--teal);">Secondary</div>
+        <div class="day-name">Upper Body + Light Glutes</div>
+        <div class="day-meta">5 exercises · ~60 min · Keep glutes primed between heavy days</div>
+      </div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-body"><div class="day-body-inner">
+      <div class="info-box" style="margin-top:0;margin-bottom:18px;"><p><span class="accent">Today's goal:</span> Light glute activation keeps neural drive and blood flow to the glutes on a non-heavy day. High reps, low intensity — feel every single rep. The squeeze is everything today.</p></div>
+
+      <div class="ex-block" id="ex-fri-1">
+        <div class="ex-top" onclick="toggleEx('ex-fri-1')">
+          <div class="ex-rank">1</div>
+          <div class="ex-info"><div class="ex-name">Incline Dumbbell Press</div><div class="ex-brief">Upper chest — balanced physique</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">10–12 reps</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>💡 Why this matters:</strong> Upper chest development fills out the upper body and completes the balanced physique that frames your glutes. A well-built upper body makes the waist-to-hip ratio more pronounced.</div>
+          <div class="cue-section"><div class="cue-label">✅ Key Coaching Cues</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Bench set to 30–45°. Dumbbells at chest level, elbows at about 45° from the body (not flared out wide).</div>
+            <div class="cue-item"><div class="cue-dot"></div>Press up and slightly together — arc the dumbbells toward each other at the top.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Lower slowly — 3 seconds — feel the chest stretch at the bottom.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Keep shoulder blades retracted and depressed throughout. Protect the shoulder joint.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Do NOT bounce out of the bottom. Control is everything here.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This Exercise</div>
+            <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-fri-1"></div>
+            <button class="add-set-btn" onclick="addSet('ex-fri-1','FRI – Incline Press')">+ Add set</button>
+            <textarea class="log-note" id="note-ex-fri-1" placeholder="Notes..."></textarea>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-fri-1','Incline DB Press')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-fri-2">
+        <div class="ex-top" onclick="toggleEx('ex-fri-2')">
+          <div class="ex-rank">2</div>
+          <div class="ex-info"><div class="ex-name">Cable Face Pull</div><div class="ex-brief">Shoulder health — non-negotiable long-term</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">15–20 reps</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>💡 Why this matters:</strong> Face pulls keep your shoulder joint healthy and correct the internal rotation from pressing exercises. Without this, shoulder issues will eventually limit your upper body training and indirectly hurt your overall program compliance.</div>
+          <div class="cue-section"><div class="cue-label">✅ Key Coaching Cues</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Cable at face height with a rope attachment. Grip both ends, palms facing down.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Pull the rope toward your face, splitting it apart — hands end up beside your ears.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Elbows stay HIGH and OUT — at or above shoulder height throughout.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Squeeze the rear delts and upper back at the end. Hold 1 second.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Light weight, high reps. This is rehab and prehab — not a strength exercise.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This Exercise</div>
+            <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-fri-2"></div>
+            <button class="add-set-btn" onclick="addSet('ex-fri-2','FRI – Face Pull')">+ Add set</button>
+            <textarea class="log-note" id="note-ex-fri-2" placeholder="Notes..."></textarea>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-fri-2','Cable Face Pull')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-fri-3">
+        <div class="ex-top" onclick="toggleEx('ex-fri-3')">
+          <div class="ex-rank">3</div>
+          <div class="ex-info"><div class="ex-name">Resistance Band Glute Bridge</div><div class="ex-brief">Band above knees — glute med fires hard</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">4 sets</span><span class="pill pill-reps">20–25 reps</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>🍑 Glute Focus:</strong> The band above the knees forces you to push outward against it — activating the gluteus medius alongside the maximus simultaneously. This is one of the best glute activation exercises that can be done anywhere. High reps today = maximum blood flow and pump without taxing recovery.</div>
+          <div class="cue-section"><div class="cue-label">✅ Key Coaching Cues</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Lie on your back, band just above knees, feet flat, hip-width or slightly wider.</div>
+            <div class="cue-item"><div class="cue-dot"></div>ACTIVELY push knees out against the band throughout the entire movement. Don't let them cave.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Drive hips up through the heels. Squeeze glutes HARD at the top for 1–2 seconds.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Lower slowly — do NOT drop hips. Keep continuous tension, don't rest on the floor between reps.</div>
+            <div class="cue-item"><div class="cue-dot"></div>By rep 20 your glutes should be burning intensely. That's exactly where you want to be.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This Exercise</div>
+            <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Band</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-fri-3"></div>
+            <button class="add-set-btn" onclick="addSet('ex-fri-3','FRI – Glute Bridge')">+ Add set</button>
+            <textarea class="log-note" id="note-ex-fri-3" placeholder="Notes..."></textarea>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-fri-3','Banded Glute Bridge')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-fri-4">
+        <div class="ex-top" onclick="toggleEx('ex-fri-4')">
+          <div class="ex-rank">4</div>
+          <div class="ex-info"><div class="ex-name">Banded Clamshell</div><div class="ex-brief">Gluteus medius — outer hip width</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">20 each side</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>🍑 Glute Focus:</strong> The clamshell is one of the few exercises that isolates the gluteus medius with zero quad or hamstring involvement. This is the muscle that creates hip width and the curved, 3D shape of the glute from the front view. Do NOT skip this.</div>
+          <div class="cue-section"><div class="cue-label">✅ Key Coaching Cues</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Lie on your side, hips stacked perfectly on top of each other. Knees bent ~45°. Band above knees.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Keep feet together. Rotate the top knee UP and back — like a clamshell opening.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Feel the deep burn in the OUTER HIP of the top leg — that's the gluteus medius.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Do NOT let your top hip roll backward to compensate. Hips stay stacked. Core is braced.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Slow and controlled both ways. The return phase (closing) also works the muscle — don't collapse it.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This Exercise</div>
+            <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Band</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-fri-4"></div>
+            <button class="add-set-btn" onclick="addSet('ex-fri-4','FRI – Clamshell')">+ Add set</button>
+            <textarea class="log-note" id="note-ex-fri-4" placeholder="Notes..."></textarea>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-fri-4','Banded Clamshell')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-fri-5">
+        <div class="ex-top" onclick="toggleEx('ex-fri-5')">
+          <div class="ex-rank">5</div>
+          <div class="ex-info"><div class="ex-name">Tricep Rope Pushdown</div><div class="ex-brief">Arm definition — upper body finish</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">3 sets</span><span class="pill pill-reps">12–15 reps</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>💡 Why this matters:</strong> Triceps make up ~60% of upper arm size. Strong, defined arms complete the balanced physique and signal overall muscle development. Light, controlled, focused — this is a finishing move.</div>
+          <div class="cue-section"><div class="cue-label">✅ Key Coaching Cues</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>High cable, rope attachment. Stand close, slight forward lean. Elbows locked to your sides.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Push the rope DOWN and slightly OUT at the bottom — split the rope apart at full extension.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Squeeze the tricep HARD at the bottom. Hold 1 second.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Control the return — do not let the weight pull your arms up. 2–3 second return.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Elbows must NOT move. They are your pivot point. The moment they drift, you've lost the tricep.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This Exercise</div>
+            <div class="log-headers"><div class="log-hdr">Set</div><div class="log-hdr">Weight (kg)</div><div class="log-hdr">Reps done</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-fri-5"></div>
+            <button class="add-set-btn" onclick="addSet('ex-fri-5','FRI – Tricep')">+ Add set</button>
+            <textarea class="log-note" id="note-ex-fri-5" placeholder="Notes..."></textarea>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-fri-5','Tricep Pushdown')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;text-align:center;"><button class="btn-primary" onclick="completeWorkout('Friday','Upper + Light Glutes')">✅ Mark Friday Complete</button></div>
+    </div></div>
+  </div>
+
+  <div class="day-card" id="d2">
+    <div class="day-header" onclick="toggleDay('d2')">
+      <div class="day-abbr" style="background:rgba(168,218,220,.08);border:1px solid rgba(168,218,220,.2);color:var(--soft);">WED</div>
+      <div class="day-info">
+        <div class="day-type" style="color:var(--soft);">Recovery</div>
+        <div class="day-name">Active Recovery + Stretching</div>
+        <div class="day-meta">6 movements · ~25 min · Critical for glute activation quality</div>
+      </div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-body"><div class="day-body-inner">
+      <div class="info-box" style="margin-top:0;margin-bottom:18px;"><p><span class="accent">This day is not optional.</span> Tight hip flexors directly inhibit glute activation — meaning your heavy days are less effective when you skip recovery. This 25-minute routine unlocks your glutes for Thursday's session.</p></div>
+
+      <div class="ex-block" id="ex-wed-1">
+        <div class="ex-top" onclick="toggleEx('ex-wed-1')">
+          <div class="ex-rank">1</div>
+          <div class="ex-info"><div class="ex-name">Kneeling Hip Flexor Stretch</div><div class="ex-brief">Priority #1 — unlocks glute activation</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">3 rounds</span><span class="pill pill-reps">60 sec each</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>🍑 Why this is #1:</strong> Reciprocal inhibition — when your hip flexor is shortened and tight (from sitting), your nervous system automatically TURNS DOWN the glute on the opposite side. This is why many people squat and feel it only in their quads. Stretch the hip flexor = unlock the glute. Do this EVERY DAY.</div>
+          <div class="cue-section"><div class="cue-label">✅ How to Stretch</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Kneel on one knee (right knee down, left foot forward). Place a folded mat under the knee for comfort.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Shift your hips FORWARD — feel the deep front-of-hip stretch on the kneeling side.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Posterior pelvic tilt — tuck your tailbone under slightly to DEEPEN the stretch dramatically.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Raise the arm on the kneeling side overhead and lean slightly away — adds thoracic component.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Hold 60 seconds minimum. Breathe deeply. You will feel the tension release after ~30 seconds.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This</div>
+            <div class="log-headers"><div class="log-hdr">Round</div><div class="log-hdr">Left (sec)</div><div class="log-hdr">Right (sec)</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-wed-1"></div>
+            <button class="add-set-btn" onclick="addSet('ex-wed-1','WED – Hip Flexor')">+ Add round</button>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-wed-1','Hip Flexor Stretch')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-wed-2">
+        <div class="ex-top" onclick="toggleEx('ex-wed-2')">
+          <div class="ex-rank">2</div>
+          <div class="ex-info"><div class="ex-name">Pigeon Pose</div><div class="ex-brief">Deep glute and hip external rotator release</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">3 rounds</span><span class="pill pill-reps">90 sec each</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>🍑 Why this matters:</strong> Pigeon pose releases the piriformis and deep hip rotators that sit beneath the gluteus maximus. When these are tight they compress the sciatic nerve and limit hip range of motion — directly reducing how deep and effective your squats and hip thrusts are.</div>
+          <div class="cue-section"><div class="cue-label">✅ How to Do It</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>From all fours, bring your right shin forward parallel (or angled) in front of you. Extend left leg back straight.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Square your hips toward the floor as much as possible. Use a block or folded blanket under the right hip if needed.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Walk hands forward and lower your torso toward the floor. Relax completely — let gravity do the work.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Breathe slowly and deeply for 90 seconds. On each exhale, consciously release tension in the hip.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Come out SLOWLY — don't spring out. The hip muscles are temporarily lengthened and vulnerable.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This</div>
+            <div class="log-headers"><div class="log-hdr">Round</div><div class="log-hdr">Left (sec)</div><div class="log-hdr">Right (sec)</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-wed-2"></div>
+            <button class="add-set-btn" onclick="addSet('ex-wed-2','WED – Pigeon Pose')">+ Add round</button>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-wed-2','Pigeon Pose')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-wed-3">
+        <div class="ex-top" onclick="toggleEx('ex-wed-3')">
+          <div class="ex-rank">3</div>
+          <div class="ex-info"><div class="ex-name">Foam Roll — Glutes + IT Band</div><div class="ex-brief">Break up adhesions, restore tissue quality</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">1 round</span><span class="pill pill-reps">10 min total</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>🍑 Why this matters:</strong> Foam rolling increases blood flow, reduces muscle stiffness, and breaks up fascial adhesions that limit range of motion. Rolling your glutes before training can immediately increase how deeply they stretch and contract. 30–45 seconds on each tender spot you find.</div>
+          <div class="cue-section"><div class="cue-label">✅ How to Do It</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Sit on the foam roller, one ankle crossed over the opposite knee. Roll the glute of the crossed leg.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Find a tender spot — pause there for 30–45 seconds. Don't just roll fast back and forth.</div>
+            <div class="cue-item"><div class="cue-dot"></div>For IT band: lie on your side, roll from hip to just above the knee. Slow, deliberate passes.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Breathe through the discomfort. The tight spots are the ones that need the most time.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Spend extra time on any area that feels particularly restricted or tender.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This</div>
+            <div class="log-headers"><div class="log-hdr">Area</div><div class="log-hdr">Time (min)</div><div class="log-hdr">Notes</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-wed-3"></div>
+            <button class="add-set-btn" onclick="addSet('ex-wed-3','WED – Foam Roll')">+ Add area</button>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-wed-3','Foam Rolling')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-wed-4">
+        <div class="ex-top" onclick="toggleEx('ex-wed-4')">
+          <div class="ex-rank">4</div>
+          <div class="ex-info"><div class="ex-name">90/90 Hip Stretch</div><div class="ex-brief">Internal + external rotation — full hip mobility</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">2 rounds</span><span class="pill pill-reps">60 sec each side</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>🍑 Why this matters:</strong> The 90/90 stretch works both internal and external hip rotation simultaneously — two ranges of motion that are critical for full glute recruitment in hip thrusts and squats. Most people have very limited internal rotation which directly limits hip drive power.</div>
+          <div class="cue-section"><div class="cue-label">✅ How to Do It</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Sit on the floor. Front leg at 90° in front of you. Back leg at 90° behind and to the side.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Both knees bent at 90°. Sit tall and upright — do not collapse sideways.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Lean forward over the front shin to feel the external rotation stretch in the front hip.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Then sit back upright and lean toward the back leg to feel the internal rotation stretch.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Switch sides and repeat. Over weeks you'll feel this position becoming much easier and more open.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This</div>
+            <div class="log-headers"><div class="log-hdr">Round</div><div class="log-hdr">Left (sec)</div><div class="log-hdr">Right (sec)</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-wed-4"></div>
+            <button class="add-set-btn" onclick="addSet('ex-wed-4','WED – 90/90')">+ Add round</button>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-wed-4','90/90 Hip Stretch')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-block" id="ex-wed-5">
+        <div class="ex-top" onclick="toggleEx('ex-wed-5')">
+          <div class="ex-rank">5</div>
+          <div class="ex-info"><div class="ex-name">Light Walk or Zone 2 Cycling</div><div class="ex-brief">Increase blood flow, aid recovery</div></div>
+          <div class="ex-pills"><span class="pill pill-sets">1 session</span><span class="pill pill-reps">20–30 min</span></div>
+          <div class="ex-chevron" style="margin-left:8px;">▾</div>
+        </div>
+        <div class="ex-expand">
+          <div class="glute-focus"><strong>💡 Why this matters:</strong> Zone 2 cardio (conversational pace — you can talk in full sentences) increases blood flow to recovering muscles without adding fatigue. This flushes out metabolic waste and delivers nutrients to the glute tissue that was broken down Monday and Thursday.</div>
+          <div class="cue-section"><div class="cue-label">✅ How to Do It Right</div><div class="cue-list">
+            <div class="cue-item"><div class="cue-dot"></div>Walk outdoors or use a stationary bike. Heart rate around 120–135 bpm max.</div>
+            <div class="cue-item"><div class="cue-dot"></div>You should be able to hold a full conversation without gasping. If you can't — slow down.</div>
+            <div class="cue-item"><div class="cue-dot"></div>20–30 minutes is ideal. Do NOT go harder thinking more is better — this defeats the purpose.</div>
+            <div class="cue-item"><div class="cue-dot"></div>Walking uphill or on an incline treadmill adds gentle glute activation without stress.</div>
+            <div class="cue-item"><div class="cue-dot"></div>This is also excellent for mental recovery and stress reduction — which lowers cortisol and helps muscle retention.</div>
+          </div></div>
+          <div class="log-section">
+            <div class="log-label">📝 Log This</div>
+            <div class="log-headers"><div class="log-hdr">Type</div><div class="log-hdr">Duration</div><div class="log-hdr">Feel</div><div class="log-hdr">Done</div></div>
+            <div id="sets-ex-wed-5"></div>
+            <button class="add-set-btn" onclick="addSet('ex-wed-5','WED – Cardio')">+ Add session</button>
+            <button class="save-log-btn" onclick="saveExerciseLog('ex-wed-5','Zone 2 Cardio')">💾 Save Log</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;text-align:center;"><button class="btn-primary" onclick="completeWorkout('Wednesday','Recovery')">✅ Mark Wednesday Complete</button></div>
+    </div></div>
+  </div>
+
+  <!-- PROGRESSION PROTOCOL -->
+  <div class="section-hdr" style="margin-top:32px;"><h2 class="serif">Progression Protocol</h2><div class="line"></div></div>
+  <div class="card">
+    <div class="prog-row" style="margin-bottom:14px;display:flex;gap:14px;align-items:flex-start;"><div style="flex-shrink:0;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.2);border-radius:4px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--orange);letter-spacing:.05em;white-space:nowrap;">Weeks 1–4</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Learn the movements. Focus on form, depth, and the mind-muscle connection. Use moderate weight.</div></div>
+    <div class="prog-row" style="margin-bottom:14px;display:flex;gap:14px;align-items:flex-start;"><div style="flex-shrink:0;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.2);border-radius:4px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--orange);letter-spacing:.05em;white-space:nowrap;">Weeks 5–8</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Add weight every session. Track every lift. Aim for RPE 8–9 on main compounds.</div></div>
+    <div class="prog-row" style="margin-bottom:14px;display:flex;gap:14px;align-items:flex-start;"><div style="flex-shrink:0;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.2);border-radius:4px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--orange);letter-spacing:.05em;white-space:nowrap;">Weeks 9–12</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Introduce pause reps at top of hip thrust, 3-second negatives on RDL.</div></div>
+    <div class="prog-row" style="display:flex;gap:14px;align-items:flex-start;"><div style="flex-shrink:0;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.2);border-radius:4px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--orange);letter-spacing:.05em;white-space:nowrap;">Weeks 13–16</div><div style="font-size:13px;color:var(--muted);line-height:1.6;">Deload week at 16 then reassess. Significant visible change by this point.</div></div>
+  </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════
+     WARM-UP TAB
+═══════════════════════════════════════════════ -->
+<div id="warmup" class="section">
+  <div class="info-box">
+    <p><span class="accent">Why this matters:</span> Glute warm-up is not optional. Most people go straight to squats with cold, inactive glutes — then wonder why they feel it in their quads. This 10-minute routine wakes up your glutes BEFORE every session and can increase glute activation by up to 40% in your working sets.</p>
+  </div>
+
+  <div class="section-hdr"><h2 class="serif">Glute Activation Warm-Up</h2><div class="line"></div>
+    <span style="font-size:11px;color:var(--dim);">~10 min</span></div>
+
+  <div class="warmup-item">
+    <div class="warmup-num">1</div>
+    <div>
+      <div class="warmup-name">Hip Flexor Stretch (Kneeling)</div>
+      <div class="warmup-detail">Kneeling lunge position. Push hips forward, feel the front of hip stretching. Posterior pelvic tilt to increase stretch. This unlocks glute activation — tight hip flexors literally prevent your glutes from firing properly.</div>
+      <div class="warmup-duration">⏱ 60 seconds each side · 2 rounds</div>
+    </div>
+  </div>
+
+  <div class="warmup-item">
+    <div class="warmup-num">2</div>
+    <div>
+      <div class="warmup-name">Glute Squeeze Hold</div>
+      <div class="warmup-detail">Stand tall. Squeeze both glutes as hard as you can. Hold 5 seconds. Release. Repeat. This establishes the mind-muscle connection before your session. You're essentially "turning on" the nervous pathway to the glute muscle.</div>
+      <div class="warmup-duration">⏱ 10 reps × 5-second holds</div>
+    </div>
+  </div>
+
+  <div class="warmup-item">
+    <div class="warmup-num">3</div>
+    <div>
+      <div class="warmup-name">Banded Clamshell</div>
+      <div class="warmup-detail">Light resistance band just above knees. Lie on side, hips stacked, knees bent 45°. Open the top knee like a clamshell — feel the deep outer hip squeeze. This activates the gluteus medius which stabilizes all your compound movements.</div>
+      <div class="warmup-duration">⏱ 20 reps each side · 2 rounds</div>
+    </div>
+  </div>
+
+  <div class="warmup-item">
+    <div class="warmup-num">4</div>
+    <div>
+      <div class="warmup-name">Banded Glute Bridge</div>
+      <div class="warmup-detail">Band just above knees. Lie on back, feet flat. Drive hips up. Push knees OUT against the band throughout. Hold 2 seconds at the top per rep. This is your glute activation primer — the exact movement pattern of the hip thrust.</div>
+      <div class="warmup-duration">⏱ 20 reps · 2 rounds</div>
+    </div>
+  </div>
+
+  <div class="warmup-item">
+    <div class="warmup-num">5</div>
+    <div>
+      <div class="warmup-name">Banded Lateral Walk</div>
+      <div class="warmup-detail">Band above knees. Slight squat position. Walk sideways 10 steps each direction. Keep tension on the band throughout. This fires up the glute medius and hip abductors — essential for knee stability in squats and hip thrusts.</div>
+      <div class="warmup-duration">⏱ 10 steps each direction · 3 rounds</div>
+    </div>
+  </div>
+
+  <div class="warmup-item">
+    <div class="warmup-num">6</div>
+    <div>
+      <div class="warmup-name">Bodyweight Hip Thrust Activation</div>
+      <div class="warmup-detail">No weight. Perform 15 slow, deliberate hip thrusts. Focus entirely on feeling ONLY your glutes working. This is your rehearsal — perfect the squeeze before you add weight. Your glutes should feel warm and pumped after this.</div>
+      <div class="warmup-duration">⏱ 15 reps × 2 rounds</div>
+    </div>
+  </div>
+
+  <div class="section-hdr" style="margin-top:28px;"><h2 class="serif">Glute Anatomy — What You're Building</h2><div class="line"></div></div>
+  <div class="glute-map">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Your glutes are made of 3 distinct muscles. Each exercise in this program is chosen to target all 3 for complete development.</p>
+    <div class="muscle-info">
+      <div class="muscle-box">
+        <div class="muscle-box-pct">70%</div>
+        <div class="muscle-box-name">Gluteus Maximus</div>
+        <div class="muscle-box-role">Mass, size, and projection. Hit by: Hip Thrusts, RDL, Squats, Deadlifts</div>
+      </div>
+      <div class="muscle-box">
+        <div class="muscle-box-pct">20%</div>
+        <div class="muscle-box-name">Gluteus Medius</div>
+        <div class="muscle-box-role">Width, roundness, hip stability. Hit by: Abduction, Clamshell, Curtsy Lunge</div>
+      </div>
+      <div class="muscle-box">
+        <div class="muscle-box-pct">10%</div>
+        <div class="muscle-box-name">Gluteus Minimus</div>
+        <div class="muscle-box-role">Hip rotation & depth. Hit by: Abduction, Lateral Walk, Single-leg work</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MY LOG TAB
+═══════════════════════════════════════════════ -->
+<div id="log" class="section">
+  <div class="section-hdr" style="margin-top:28px;"><h2 class="serif">Workout History</h2><div class="line"></div></div>
+  <div id="workoutHistory"></div>
+
+  <div class="section-hdr" style="margin-top:28px;"><h2 class="serif">Personal Records 🏆</h2><div class="line"></div></div>
+  <div id="prBoard"></div>
+
+  <div class="section-hdr" style="margin-top:28px;"><h2 class="serif">Body Measurements</h2><div class="line"></div></div>
+  <div class="card">
+    <p style="font-size:12px;color:var(--muted);margin-bottom:16px;">Track your measurements every 2 weeks. The tape measure tells the real story of glute growth — the scale will NOT reflect muscle gained.</p>
+    <div class="meas-grid">
+      <div class="meas-input-wrap"><div class="meas-lbl">Weight (kg)</div><input class="form-input" type="number" id="m-weight" placeholder="58.0" step="0.1"/></div>
+      <div class="meas-input-wrap"><div class="meas-lbl">Glutes / Butt (cm)</div><input class="form-input" type="number" id="m-glutes" placeholder="e.g. 96" step="0.5"/></div>
+      <div class="meas-input-wrap"><div class="meas-lbl">Hips (cm)</div><input class="form-input" type="number" id="m-hips" placeholder="e.g. 92" step="0.5"/></div>
+      <div class="meas-input-wrap"><div class="meas-lbl">Waist (cm)</div><input class="form-input" type="number" id="m-waist" placeholder="e.g. 68" step="0.5"/></div>
+      <div class="meas-input-wrap"><div class="meas-lbl">Thigh — L (cm)</div><input class="form-input" type="number" id="m-thigh" placeholder="e.g. 55" step="0.5"/></div>
+      <div class="meas-input-wrap"><div class="meas-lbl">Notes</div><input class="form-input" type="text" id="m-note" placeholder="How you feel, etc."/></div>
+    </div>
+    <button class="btn-primary" onclick="saveMeasurement()" style="width:100%;margin-top:4px;">📏 Save Measurement</button>
+  </div>
+  <div id="measurementHistory" class="meas-history"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PROGRESS TAB
+═══════════════════════════════════════════════ -->
+<div id="progress" class="section">
+  <div class="section-hdr" style="margin-top:28px;"><h2 class="serif">Your Progress</h2><div class="line"></div></div>
+  <div class="prog-grid">
+    <div class="prog-stat"><div class="prog-stat-val" id="p-workouts">0</div><div class="prog-stat-lbl">Workouts Done</div></div>
+    <div class="prog-stat"><div class="prog-stat-val" id="p-sets">0</div><div class="prog-stat-lbl">Total Sets Logged</div></div>
+    <div class="prog-stat"><div class="prog-stat-val" id="p-glute">0</div><div class="prog-stat-lbl">Glute Sessions</div></div>
+    <div class="prog-stat"><div class="prog-stat-val" id="p-meas">0</div><div class="prog-stat-lbl">Check-ins Done</div></div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Weekly Workouts (last 8 weeks)</div>
+    <div class="chart-bars" id="weeklyChart"></div>
+  </div>
+
+  <div class="section-hdr"><h2 class="serif">Glute Measurement Progress</h2><div class="line"></div></div>
+  <div class="chart-wrap">
+    <div class="chart-title">Glute circumference over time (cm)</div>
+    <div class="chart-bars" id="gluteChart"></div>
+    <p style="font-size:11px;color:var(--dim);margin-top:8px;">Log measurements in the My Log tab to see progress here.</p>
+  </div>
+
+  <div class="section-hdr"><h2 class="serif">Weight Progress</h2><div class="line"></div></div>
+  <div class="chart-wrap">
+    <div class="chart-title">Body weight over time (kg) — Target: 53kg</div>
+    <div class="chart-bars" id="weightChart"></div>
+  </div>
+
+  <div class="section-hdr"><h2 class="serif">Expected Timeline</h2><div class="line"></div></div>
+  <div class="timeline-box">
+    <div class="tl-row"><div class="tl-dc"><div class="tl-dot" style="background:var(--orange)"></div><div class="tl-line"></div></div><div><div class="tl-phase" style="color:var(--orange)">Weeks 1–2</div><div class="tl-desc">Soreness. Newness. You will feel your glutes 24–48hrs after sessions. That's growth.</div></div></div>
+    <div class="tl-row"><div class="tl-dc"><div class="tl-dot" style="background:var(--teal)"></div><div class="tl-line"></div></div><div><div class="tl-phase" style="color:var(--teal)">Weeks 3–6</div><div class="tl-desc">Strength increases fast. Form clicks. You will add weight every session.</div></div></div>
+    <div class="tl-row"><div class="tl-dc"><div class="tl-dot" style="background:var(--gold)"></div><div class="tl-line"></div></div><div><div class="tl-phase" style="color:var(--gold)">Weeks 6–10</div><div class="tl-desc">Visible shape begins. Jeans fit differently. 2–3kg of fat lost, muscle firm and lifting.</div></div></div>
+    <div class="tl-row"><div class="tl-dc"><div class="tl-dot" style="background:var(--orange)"></div></div><div><div class="tl-phase" style="color:var(--orange)">Weeks 12–16</div><div class="tl-desc">Significant transformation. Glute shape, roundness, and lift visible in mirror. This is when other people start noticing.</div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     DIET TAB
+═══════════════════════════════════════════════ -->
+<div id="diet" class="section">
+  <div class="macro-grid">
+    <div class="macro-card" style="border:1px solid rgba(255,107,53,.3)"><div class="macro-val" style="color:var(--orange)">~1,900</div><div class="macro-lbl">Calories</div></div>
+    <div class="macro-card" style="border:1px solid rgba(78,205,196,.3)"><div class="macro-val" style="color:var(--teal)">155g</div><div class="macro-lbl">Protein</div></div>
+    <div class="macro-card" style="border:1px solid rgba(255,230,109,.3)"><div class="macro-val" style="color:var(--gold)">180g</div><div class="macro-lbl">Carbs</div></div>
+  </div>
+  <div class="info-box">
+    <p><span class="accent">Strategy:</span> Slight caloric deficit (~200kcal below TDEE) to lose fat while high protein preserves and builds muscle. This is a body recomposition — you will lose fat AND gain glute muscle simultaneously. Carbs are front-loaded around training windows for performance and recovery.</p>
+  </div>
+
+  <div class="meal-card">
+    <div><div class="meal-icon">🌅</div><div class="meal-time">7:00 AM</div></div>
+    <div><div class="meal-title">Breakfast</div><div class="meal-food"><span class="fdot"></span>4 egg whites + 1 whole egg scrambled</div><div class="meal-food"><span class="fdot"></span>½ cup oats with 1 tbsp almond butter</div><div class="meal-food"><span class="fdot"></span>1 banana</div></div>
+    <div><div class="meal-kcal">490</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:var(--teal)">P: 35g</div><div style="color:var(--gold)">C: 60g</div><div style="color:var(--soft)">F: 12g</div></div></div>
+  </div>
+  <div class="meal-card">
+    <div><div class="meal-icon">🥛</div><div class="meal-time">10:00 AM</div></div>
+    <div><div class="meal-title">Mid-Morning</div><div class="meal-food"><span class="fdot"></span>Greek yogurt (full fat, 150g)</div><div class="meal-food"><span class="fdot"></span>1 tbsp honey</div><div class="meal-food"><span class="fdot"></span>Walnuts (20g)</div></div>
+    <div><div class="meal-kcal">278</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:var(--teal)">P: 18g</div><div style="color:var(--gold)">C: 20g</div><div style="color:var(--soft)">F: 14g</div></div></div>
+  </div>
+  <div class="meal-card">
+    <div><div class="meal-icon">🍗</div><div class="meal-time">1:00 PM</div></div>
+    <div><div class="meal-title">Lunch</div><div class="meal-food"><span class="fdot"></span>150g chicken breast (grilled)</div><div class="meal-food"><span class="fdot"></span>1 cup white rice</div><div class="meal-food"><span class="fdot"></span>½ avocado + large salad with olive oil</div></div>
+    <div><div class="meal-kcal">562</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:var(--teal)">P: 45g</div><div style="color:var(--gold)">C: 55g</div><div style="color:var(--soft)">F: 18g</div></div></div>
+  </div>
+  <div class="meal-card">
+    <div><div class="meal-icon">⚡</div><div class="meal-time">3:30 PM</div></div>
+    <div><div class="meal-title">Pre-Workout</div><div class="meal-food"><span class="fdot"></span>1 rice cake + 1 tbsp peanut butter</div><div class="meal-food"><span class="fdot"></span>1 medium apple</div><div class="meal-food"><span class="fdot"></span>Black coffee or pre-workout</div></div>
+    <div><div class="meal-kcal">228</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:var(--teal)">P: 5g</div><div style="color:var(--gold)">C: 35g</div><div style="color:var(--soft)">F: 8g</div></div></div>
+  </div>
+  <div class="meal-card">
+    <div><div class="meal-icon">💪</div><div class="meal-time">6:30 PM</div></div>
+    <div><div class="meal-title">Post-Workout</div><div class="meal-food"><span class="fdot"></span>Whey isolate shake (25–30g protein)</div><div class="meal-food"><span class="fdot"></span>1 cup white rice or baked potato</div><div class="meal-food"><span class="fdot"></span>1 cup steamed vegetables</div></div>
+    <div><div class="meal-kcal">387</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:var(--teal)">P: 35g</div><div style="color:var(--gold)">C: 55g</div><div style="color:var(--soft)">F: 3g</div></div></div>
+  </div>
+  <div class="meal-card">
+    <div><div class="meal-icon">🐟</div><div class="meal-time">9:00 PM</div></div>
+    <div><div class="meal-title">Dinner</div><div class="meal-food"><span class="fdot"></span>150g salmon or lean beef</div><div class="meal-food"><span class="fdot"></span>Roasted sweet potato (100g)</div><div class="meal-food"><span class="fdot"></span>Steamed broccoli + olive oil</div></div>
+    <div><div class="meal-kcal">424</div><div class="meal-kcal-lbl">kcal</div><div class="meal-macros"><div style="color:var(--teal)">P: 40g</div><div style="color:var(--gold)">C: 30g</div><div style="color:var(--soft)">F: 16g</div></div></div>
+  </div>
+
+  <div class="supp-box">
+    <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px;">Supplement Stack</div>
+    <div class="supp-row"><div class="supp-top"><span class="supp-name">Creatine Monohydrate</span><span class="supp-dose">5g daily</span></div><div class="supp-note">Most researched supplement. Increases strength 5–15%. Take every day, even rest days.</div></div>
+    <div class="supp-row"><div class="supp-top"><span class="supp-name">Whey Isolate</span><span class="supp-dose">25–30g post-workout</span></div><div class="supp-note">Fast-absorbing. Hit your protein target. Non-negotiable on training days.</div></div>
+    <div class="supp-row"><div class="supp-top"><span class="supp-name">Caffeine / Pre-workout</span><span class="supp-dose">Pre-training</span></div><div class="supp-note">Performance & focus. No later than 2pm to protect sleep quality.</div></div>
+    <div class="supp-row"><div class="supp-top"><span class="supp-name">Magnesium Glycinate</span><span class="supp-dose">300mg before bed</span></div><div class="supp-note">Sleep quality, recovery, reduces cortisol. Critical for muscle growth.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     TIPS TAB
+═══════════════════════════════════════════════ -->
+<div id="tips" class="section">
+  <p style="font-size:13px;color:var(--muted);line-height:1.7;margin:28px 0 20px;">These are the 20% of inputs that drive 80% of your results. Every single one matters.</p>
+  <div class="tip-card"><div class="tip-icon">🎯</div><div><div class="tip-title">Mind-Muscle Connection</div><div class="tip-body">Before every single set: squeeze your glutes 3 times deliberately. Then do the exercise thinking ONLY about the glute contracting. Research shows this can increase glute activation by 30%+ in the same exercise with the same weight. The mind-muscle connection is a real, measurable phenomenon.</div></div></div>
+  <div class="tip-card"><div class="tip-icon">📈</div><div><div class="tip-title">Progressive Overload — The Law</div><div class="tip-body">If you're not progressively overloading, you're not growing. Period. Add 2.5kg OR 1 extra rep per week on your main lifts. Log everything. If you can't remember what you lifted last week, you're guessing. This app is your log — use it every session.</div></div></div>
+  <div class="tip-card"><div class="tip-icon">😴</div><div><div class="tip-title">Sleep = Muscle Growth</div><div class="tip-body">Human Growth Hormone (HGH) peaks during deep sleep — this is the hormone that directly builds muscle. 7–9 hours per night. Every hour less than 7 reduces HGH release, slows recovery, and increases cortisol (which breaks down muscle). Your results are made at night, not in the gym.</div></div></div>
+  <div class="tip-card"><div class="tip-icon">💧</div><div><div class="tip-title">3 Litres of Water Daily</div><div class="tip-body">Muscle tissue is ~75% water. A 2% drop in hydration causes measurable strength decreases. Drink 3L minimum. Add electrolytes on heavy training days. A hydrated muscle is a stronger, fuller, better-looking muscle.</div></div></div>
+  <div class="tip-card"><div class="tip-icon">🍑</div><div><div class="tip-title">Hip Flexor Stretching Daily</div><div class="tip-body">If you sit for work, your hip flexors are chronically shortened. Short hip flexors = inhibited glutes. This is called "reciprocal inhibition" — when the hip flexor is tight, the nervous system actually turns DOWN glute activation as a counterbalance. Stretch them EVERY DAY, not just on rest days.</div></div></div>
+  <div class="tip-card"><div class="tip-icon">📅</div><div><div class="tip-title">Train with Your Menstrual Cycle</div><div class="tip-body">Follicular phase (days 1–14): estrogen is rising, pain tolerance is higher, strength peaks. This is your window for PRs and heavy lifts. Luteal phase (days 15–28): progesterone rises, you may feel stronger or more fatigued — lean into volume and accessory work. Working with your cycle, not against it, means better results and less suffering.</div></div></div>
+  <div class="tip-card"><div class="tip-icon">⚡</div><div><div class="tip-title">Rest Periods — Non-Negotiable</div><div class="tip-body">Heavy compound sets (hip thrust, deadlift, squat): rest 2.5–3 minutes. Isolation exercises: 60–90 seconds. Shorter rest on compounds = less weight = less growth signal. The rest timer in this app starts automatically when you mark a set done. Use it.</div></div></div>
+  <div class="tip-card"><div class="tip-icon">🔢</div><div><div class="tip-title">The Scale Will Lie to You</div><div class="tip-body">Muscle is denser than fat. As you build glute muscle and lose fat simultaneously, the scale may barely move — or even go up slightly — while your body completely transforms. TRUST THE TAPE MEASURE. Track your glute circumference every 2 weeks. That number is the truth.</div></div></div>
+</div>
+
+</div><!-- /content -->
+
+<!-- REST TIMER -->
+<div class="rest-timer-bar" id="restTimer">
+  <div class="timer-circle" id="timerCount">0</div>
+  <div class="timer-info">
+    <div class="timer-label">Rest Timer</div>
+    <div class="timer-msg" id="timerMsg">Get ready for next set</div>
+    <div class="timer-progress"><div class="timer-progress-bar" id="timerBar" style="width:100%"></div></div>
+  </div>
+  <button class="timer-btn" onclick="stopTimer()">Skip</button>
+  <button class="timer-btn" onclick="addRestTime(30)">+30s</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <script>
-  function switchTab(id, btn) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
+// ═══════════════════════════════════
+// DATA STORE (localStorage)
+// ═══════════════════════════════════
+const STORE = {
+  get(k){try{return JSON.parse(localStorage.getItem('ga_'+k))||null;}catch{return null;}},
+  set(k,v){try{localStorage.setItem('ga_'+k,JSON.stringify(v));}catch{}}
+};
+
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  buildSetRows();
+  renderWeekTracker();
+  renderWorkoutHistory();
+  renderPRBoard();
+  renderMeasurements();
+  renderProgressStats();
+  renderCharts();
+  updateHeroStats();
+});
+
+// ═══════════════════════════════════
+// TABS
+// ═══════════════════════════════════
+function switchTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='log'){renderWorkoutHistory();renderPRBoard();renderMeasurements();}
+  if(id==='progress'){renderProgressStats();renderCharts();}
+}
+
+// ═══════════════════════════════════
+// DAY / EXERCISE TOGGLES
+// ═══════════════════════════════════
+function toggleDay(id){document.getElementById(id).classList.toggle('open');}
+function toggleEx(id){document.getElementById(id).classList.toggle('open');}
+
+// ═══════════════════════════════════
+// SET ROWS
+// ═══════════════════════════════════
+const EX_CONFIGS = {
+  'ex-mon-1':{sets:5,reps:'6–8'},
+  'ex-mon-2':{sets:4,reps:'8–10'},
+  'ex-mon-3':{sets:3,reps:'10–12'},
+  'ex-mon-4':{sets:3,reps:'15–20'},
+  'ex-mon-5':{sets:3,reps:'20–25'},
+  'ex-thu-1':{sets:4,reps:'6–8'},
+  'ex-thu-2':{sets:4,reps:'10–12'},
+  'ex-thu-3':{sets:3,reps:'15–20'},
+  'ex-thu-4':{sets:3,reps:'10'},
+  'ex-thu-5':{sets:3,reps:'12–15'},
+  'ex-sat-1':{sets:4,reps:'12–15'},
+  'ex-sat-2':{sets:3,reps:'12'},
+  'ex-sat-3':{sets:3,reps:'15'},
+  'ex-sat-4':{sets:3,reps:'25–30'},
+  'ex-sat-5':{sets:2,reps:'20+20+20'},
+  'ex-tue-1':{sets:4,reps:'10–12'},
+  'ex-tue-2':{sets:3,reps:'10–12'},
+  'ex-tue-3':{sets:3,reps:'12–15'},
+  'ex-tue-4':{sets:3,reps:'45–60s'},
+  'ex-tue-5':{sets:3,reps:'10'},
+  'ex-fri-1':{sets:3,reps:'10–12'},
+  'ex-fri-2':{sets:3,reps:'15–20'},
+  'ex-fri-3':{sets:4,reps:'20–25'},
+  'ex-fri-4':{sets:3,reps:'20'},
+  'ex-fri-5':{sets:3,reps:'12–15'},
+  'ex-wed-1':{sets:3,reps:'60s'},
+  'ex-wed-2':{sets:3,reps:'90s'},
+  'ex-wed-3':{sets:1,reps:'10min'},
+  'ex-wed-4':{sets:2,reps:'60s'},
+  'ex-wed-5':{sets:1,reps:'30min'},
+};
+
+function buildSetRows(){
+  Object.keys(EX_CONFIGS).forEach(exId=>{
+    const cfg = EX_CONFIGS[exId];
+    const saved = STORE.get('log_'+exId)||{sets:[]};
+    const container = document.getElementById('sets-'+exId);
+    if(!container) return;
+    container.innerHTML='';
+    for(let i=0;i<cfg.sets;i++){
+      const s = saved.sets[i]||{};
+      container.appendChild(createSetRow(exId, i, s.weight||'', s.reps||'', s.done||false));
+    }
+  });
+}
+
+function createSetRow(exId, idx, weight, reps, done){
+  const row = document.createElement('div');
+  row.className='log-set-row';
+  row.id=`row-${exId}-${idx}`;
+  row.innerHTML=`
+    <div class="log-set-num">${idx+1}</div>
+    <input class="log-input" type="number" placeholder="kg" value="${weight}" id="w-${exId}-${idx}" step="0.5"/>
+    <input class="log-input" type="number" placeholder="reps" value="${reps}" id="r-${exId}-${idx}"/>
+    <div class="log-set-done ${done?'done':''}" id="done-${exId}-${idx}" onclick="toggleSetDone('${exId}',${idx})">${done?'✓':'○'}</div>
+  `;
+  return row;
+}
+
+function addSet(exId, label){
+  const container = document.getElementById('sets-'+exId);
+  const count = container.querySelectorAll('.log-set-row').length;
+  container.appendChild(createSetRow(exId, count, '','',false));
+}
+
+function toggleSetDone(exId, idx){
+  const doneBtn = document.getElementById(`done-${exId}-${idx}`);
+  const isDone = !doneBtn.classList.contains('done');
+  doneBtn.classList.toggle('done', isDone);
+  doneBtn.textContent = isDone ? '✓' : '○';
+  if(isDone){
+    // auto-save this set
+    const w = document.getElementById(`w-${exId}-${idx}`).value;
+    const r = document.getElementById(`r-${exId}-${idx}`).value;
+    autoSaveSet(exId, idx, w, r, true);
+    // check PR
+    checkPR(exId, w, r);
+    // start rest timer
+    startTimer(120);
+    document.getElementById('activeWorkoutBadge').style.display='inline-block';
+    showToast('Set done! ✓ Rest timer started');
   }
-  function toggleDay(id) {
-    const card = document.getElementById(id);
-    card.classList.toggle('open');
+}
+
+function autoSaveSet(exId, idx, weight, reps, done){
+  const saved = STORE.get('log_'+exId)||{sets:[]};
+  while(saved.sets.length<=idx) saved.sets.push({});
+  saved.sets[idx]={weight, reps, done};
+  STORE.set('log_'+exId, saved);
+}
+
+function saveExerciseLog(exId, name){
+  const container = document.getElementById('sets-'+exId);
+  const rows = container.querySelectorAll('.log-set-row');
+  const note = document.getElementById('note-'+exId).value;
+  const sets = [];
+  rows.forEach((row, i)=>{
+    sets.push({
+      weight: document.getElementById(`w-${exId}-${i}`)?.value||'',
+      reps: document.getElementById(`r-${exId}-${i}`)?.value||'',
+      done: document.getElementById(`done-${exId}-${i}`)?.classList.contains('done')||false,
+    });
+  });
+  STORE.set('log_'+exId,{sets,note,date:new Date().toISOString(),name});
+  showToast('✓ '+name+' saved!');
+  updateHeroStats();
+}
+
+// ═══════════════════════════════════
+// COMPLETE WORKOUT
+// ═══════════════════════════════════
+function completeWorkout(day, type){
+  const history = STORE.get('workouts')||[];
+  const today = new Date().toISOString().split('T')[0];
+  const existing = history.findIndex(w=>w.date===today&&w.day===day);
+  const entry = {day, type, date:today, ts:Date.now()};
+  if(existing>=0) history[existing]=entry;
+  else history.push(entry);
+  STORE.set('workouts', history);
+  // week tracker
+  renderWeekTracker();
+  updateHeroStats();
+  showToast('🔥 '+day+' workout logged!');
+}
+
+// ═══════════════════════════════════
+// PR TRACKER
+// ═══════════════════════════════════
+const EX_NAMES = {
+  'ex-mon-1':'Barbell Hip Thrust','ex-mon-2':'Romanian Deadlift',
+  'ex-mon-3':'Bulgarian Split Squat','ex-mon-4':'Cable Kickback',
+  'ex-thu-1':'Sumo Deadlift','ex-thu-2':'Wide Stance Squat',
+  'ex-sat-1':'Paused Hip Thrust',
+};
+
+function checkPR(exId, weight, reps){
+  if(!weight||!reps) return;
+  const w = parseFloat(weight);
+  const r = parseInt(reps);
+  if(isNaN(w)||isNaN(r)) return;
+  const prs = STORE.get('prs')||{};
+  const name = EX_NAMES[exId]||exId;
+  if(!prs[name]||w>prs[name].weight||(w===prs[name].weight&&r>prs[name].reps)){
+    const isPR = !!prs[name];
+    prs[name]={weight:w, reps:r, date:new Date().toLocaleDateString()};
+    STORE.set('prs',prs);
+    if(isPR) showToast('🏆 New PR! '+name+' — '+w+'kg × '+r);
   }
+}
+
+function renderPRBoard(){
+  const el = document.getElementById('prBoard');
+  if(!el) return;
+  const prs = STORE.get('prs')||{};
+  const keys = Object.keys(prs);
+  if(keys.length===0){
+    el.innerHTML='<div class="empty-state"><div class="es-icon">🏆</div><p>No PRs yet. Complete your first sets to start tracking personal records.</p></div>';
+    return;
+  }
+  el.innerHTML='<div class="pr-list">'+keys.map(k=>`
+    <div class="pr-item">
+      <div><div class="pr-name">${k}</div><div class="pr-date">${prs[k].date}</div></div>
+      <div><div class="pr-weight">${prs[k].weight}kg</div><div style="font-size:11px;color:var(--dim);text-align:right;">× ${prs[k].reps} reps</div></div>
+    </div>`).join('')+'</div>';
+}
+
+// ═══════════════════════════════════
+// WORKOUT HISTORY
+// ═══════════════════════════════════
+function renderWorkoutHistory(){
+  const el = document.getElementById('workoutHistory');
+  if(!el) return;
+  const h = STORE.get('workouts')||[];
+  if(h.length===0){
+    el.innerHTML='<div class="empty-state"><div class="es-icon">📋</div><p>No workouts logged yet. Complete a workout to see your history here.</p></div>';
+    return;
+  }
+  const sorted = [...h].sort((a,b)=>b.ts-a.ts).slice(0,20);
+  el.innerHTML=sorted.map(w=>{
+    const d = new Date(w.date);
+    const doneCount = countSetsForDate(w.date);
+    return`<div class="workout-history-item">
+      <div class="wh-date">${d.toLocaleDateString('en',{weekday:'long',month:'short',day:'numeric',year:'numeric'})}</div>
+      <div class="wh-day">${w.day} — ${w.type}</div>
+      ${doneCount?`<div class="wh-sets-done">✓ ${doneCount} sets logged</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function countSetsForDate(date){
+  let count=0;
+  Object.keys(EX_CONFIGS).forEach(exId=>{
+    const log = STORE.get('log_'+exId);
+    if(log&&log.date&&log.date.startsWith(date)){
+      count += (log.sets||[]).filter(s=>s.done).length;
+    }
+  });
+  return count;
+}
+
+// ═══════════════════════════════════
+// WEEK TRACKER
+// ═══════════════════════════════════
+function renderWeekTracker(){
+  const el = document.getElementById('weekTracker');
+  if(!el) return;
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const dayKeys=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const history = STORE.get('workouts')||[];
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+  const todayDay = today.getDay(); // 0=Sun
+  const dayOfWeek = todayDay===0?6:todayDay-1; // Mon=0
+
+  el.innerHTML=days.map((d,i)=>{
+    // find the date for this day in the current week
+    const diff = i - dayOfWeek;
+    const dt = new Date(today);
+    dt.setDate(today.getDate()+diff);
+    const dateStr = dt.toISOString().split('T')[0];
+    const done = history.some(w=>w.date===dateStr);
+    const isToday = dateStr===todayStr;
+    return`<div class="week-day">
+      <div class="week-day-lbl">${d}</div>
+      <div class="week-day-dot ${done?'done':''} ${isToday?'today':''}">${done?'✓':isToday?'●':'·'}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════
+// MEASUREMENTS
+// ═══════════════════════════════════
+function saveMeasurement(){
+  const meas = {
+    date: new Date().toLocaleDateString(),
+    ts: Date.now(),
+    weight: document.getElementById('m-weight').value,
+    glutes: document.getElementById('m-glutes').value,
+    hips: document.getElementById('m-hips').value,
+    waist: document.getElementById('m-waist').value,
+    thigh: document.getElementById('m-thigh').value,
+    note: document.getElementById('m-note').value,
+  };
+  if(!meas.weight&&!meas.glutes){showToast('Enter at least weight or glutes measurement');return;}
+  const all = STORE.get('measurements')||[];
+  all.push(meas);
+  STORE.set('measurements',all);
+  showToast('📏 Measurement saved!');
+  renderMeasurements();
+  renderProgressStats();
+  renderCharts();
+  ['m-weight','m-glutes','m-hips','m-waist','m-thigh','m-note'].forEach(id=>{document.getElementById(id).value='';});
+}
+
+function renderMeasurements(){
+  const el = document.getElementById('measurementHistory');
+  if(!el) return;
+  const all = STORE.get('measurements')||[];
+  if(all.length===0){el.innerHTML='<div class="empty-state" style="margin-top:16px;"><div class="es-icon">📏</div><p>No measurements yet. Log your first one above.</p></div>';return;}
+  const sorted = [...all].sort((a,b)=>b.ts-a.ts);
+  el.innerHTML=sorted.map(m=>`<div class="meas-entry">
+    <div class="meas-entry-date">${m.date}</div>
+    <div class="meas-entry-vals">
+      ${m.weight?`<span class="meas-val">Weight: <span>${m.weight}kg</span></span>`:''}
+      ${m.glutes?`<span class="meas-val">Glutes: <span>${m.glutes}cm</span></span>`:''}
+      ${m.hips?`<span class="meas-val">Hips: <span>${m.hips}cm</span></span>`:''}
+      ${m.waist?`<span class="meas-val">Waist: <span>${m.waist}cm</span></span>`:''}
+      ${m.thigh?`<span class="meas-val">Thigh: <span>${m.thigh}cm</span></span>`:''}
+    </div>
+    ${m.note?`<div style="font-size:11px;color:var(--dim);margin-top:6px;font-style:italic;">${m.note}</div>`:''}
+  </div>`).join('');
+}
+
+// ═══════════════════════════════════
+// PROGRESS STATS
+// ═══════════════════════════════════
+function renderProgressStats(){
+  const workouts = STORE.get('workouts')||[];
+  const measurements = STORE.get('measurements')||[];
+  let totalSets=0;
+  Object.keys(EX_CONFIGS).forEach(exId=>{
+    const log=STORE.get('log_'+exId);
+    if(log) totalSets+=(log.sets||[]).filter(s=>s.done).length;
+  });
+  const gluteSessions = workouts.filter(w=>w.type&&w.type.includes('Glute')).length;
+  document.getElementById('p-workouts').textContent=workouts.length;
+  document.getElementById('p-sets').textContent=totalSets;
+  document.getElementById('p-glute').textContent=gluteSessions;
+  document.getElementById('p-meas').textContent=measurements.length;
+}
+
+function updateHeroStats(){
+  const workouts = STORE.get('workouts')||[];
+  let totalSets=0;
+  Object.keys(EX_CONFIGS).forEach(exId=>{
+    const log=STORE.get('log_'+exId);
+    if(log) totalSets+=(log.sets||[]).filter(s=>s.done).length;
+  });
+  document.getElementById('hs-workouts').textContent=workouts.length;
+  document.getElementById('hs-sets').textContent=totalSets;
+  // streak
+  const streak = calcStreak(workouts);
+  document.getElementById('hs-streak').textContent=streak;
+}
+
+function calcStreak(workouts){
+  // count consecutive weeks with at least 3 workouts
+  if(!workouts.length) return 0;
+  const weekCounts={};
+  workouts.forEach(w=>{
+    const d=new Date(w.date);
+    const yr=d.getFullYear();
+    const wk=getWeekNum(d);
+    const key=`${yr}-${wk}`;
+    weekCounts[key]=(weekCounts[key]||0)+1;
+  });
+  const currentWeek=getWeekNum(new Date());
+  const currentYear=new Date().getFullYear();
+  let streak=0;
+  for(let i=0;i<52;i++){
+    const d=new Date();d.setDate(d.getDate()-i*7);
+    const key=`${d.getFullYear()}-${getWeekNum(d)}`;
+    if(weekCounts[key]>=3) streak++;
+    else if(i>0) break;
+  }
+  return streak;
+}
+
+function getWeekNum(d){
+  const onejan=new Date(d.getFullYear(),0,1);
+  return Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
+}
+
+// ═══════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════
+function renderCharts(){
+  renderWeeklyChart();
+  renderMeasChart('gluteChart','glutes','Glute (cm)');
+  renderMeasChart('weightChart','weight','Weight (kg)');
+}
+
+function renderWeeklyChart(){
+  const el=document.getElementById('weeklyChart');
+  if(!el) return;
+  const workouts=STORE.get('workouts')||[];
+  const weeks=[];
+  for(let i=7;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i*7);
+    const wk=getWeekNum(d);const yr=d.getFullYear();
+    const count=workouts.filter(w=>{
+      const wd=new Date(w.date);
+      return getWeekNum(wd)===wk&&wd.getFullYear()===yr;
+    }).length;
+    weeks.push({label:'W'+(8-i),count});
+  }
+  const max=Math.max(...weeks.map(w=>w.count),1);
+  el.innerHTML=weeks.map((w,i)=>`
+    <div class="chart-bar-wrap">
+      <div class="chart-bar-val">${w.count||''}</div>
+      <div class="chart-bar ${i===7?'current':''}" style="height:${(w.count/max)*100}%;width:100%;"></div>
+      <div class="chart-bar-lbl">${w.label}</div>
+    </div>`).join('');
+}
+
+function renderMeasChart(elId, field, label){
+  const el=document.getElementById(elId);
+  if(!el) return;
+  const all=(STORE.get('measurements')||[]).filter(m=>m[field]).sort((a,b)=>a.ts-b.ts).slice(-8);
+  if(all.length===0){el.innerHTML='<div style="font-size:12px;color:var(--dim);padding:20px;text-align:center;">No data yet</div>';return;}
+  const vals=all.map(m=>parseFloat(m[field]));
+  const max=Math.max(...vals);const min=Math.min(...vals)-2;
+  const range=max-min||1;
+  el.innerHTML=all.map((m,i)=>`
+    <div class="chart-bar-wrap">
+      <div class="chart-bar-val" style="font-size:8px;">${vals[i]}</div>
+      <div class="chart-bar ${i===all.length-1?'current':''}" style="height:${((vals[i]-min)/range)*90+10}%;width:100%;"></div>
+      <div class="chart-bar-lbl">${m.date.split('/').slice(0,2).join('/')}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════
+// REST TIMER
+// ═══════════════════════════════════
+let timerInterval=null;
+let timerTotal=0;
+let timerLeft=0;
+
+function startTimer(seconds){
+  stopTimer();
+  timerTotal=seconds;
+  timerLeft=seconds;
+  const bar=document.getElementById('restTimer');
+  bar.classList.add('visible');
+  updateTimerDisplay();
+  timerInterval=setInterval(()=>{
+    timerLeft--;
+    updateTimerDisplay();
+    if(timerLeft<=0){
+      clearInterval(timerInterval);
+      document.getElementById('timerMsg').textContent='Time to go! Start your next set 💪';
+      document.getElementById('timerCount').textContent='GO!';
+      document.getElementById('timerBar').style.width='100%';
+      setTimeout(stopTimer,3000);
+    }
+  },1000);
+}
+
+function updateTimerDisplay(){
+  document.getElementById('timerCount').textContent=timerLeft;
+  document.getElementById('timerMsg').textContent=timerLeft>60?'Rest & breathe':'Almost ready — get in position';
+  const pct=(timerLeft/timerTotal)*100;
+  document.getElementById('timerBar').style.width=pct+'%';
+}
+
+function stopTimer(){
+  clearInterval(timerInterval);
+  document.getElementById('restTimer').classList.remove('visible');
+}
+
+function addRestTime(sec){
+  timerLeft+=sec;timerTotal+=sec;updateTimerDisplay();
+}
+
+// ═══════════════════════════════════
+// TOAST
+// ═══════════════════════════════════
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
 </script>
 </body>
 </html>
